@@ -158,7 +158,6 @@ namespace OnlineShop.Controllers
             _database.manufacturer.Add(manufacturer);
             _database.SaveChanges();
             return Redirect($"/Product/AddProduct?={ProductID}");
-
         }
 
         public IActionResult Show2()       
