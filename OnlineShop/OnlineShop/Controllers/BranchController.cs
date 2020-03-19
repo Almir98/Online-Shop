@@ -115,9 +115,5 @@ namespace OnlineShop.Controllers
 
             return Redirect("/Branch/ShowAllBranches");
         }
-
-
-
-
     }
 }
