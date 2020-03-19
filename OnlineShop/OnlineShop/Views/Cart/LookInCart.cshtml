@@ -1,0 +1,27 @@
+﻿@using OnlineShopPodaci.Model;
+@{
+
+}
+@model List<OnlineShop.ViewModels.LookInCartVM>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LookInCart</title>
+</head>
+<body>
+    <h2 style="color:maroon">Košarica</h2> <br />
+   
+    <div border="1" id="tabela">
+
+    </div> 
+</body>
+</html>
+
+<script>
+
+        $.get("/Cart/GetCartItems?userid=6", function (res) {
+            $("#tabela").html(res);
+        });
+
+</script>

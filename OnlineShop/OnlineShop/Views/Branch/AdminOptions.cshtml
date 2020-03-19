@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "nul";
+}
+
+@model AdminOptionsVM
+
+<h5>Admin opcije</h5>
+
+<input asp-for="productID" hidden />
+
+<table >
+    <tr>
+        <td >Izmjeni cijenu</td>
+        <td></td>
+        <td>
+            <a class="btn btn bg-primary">Promjeni</a>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Uredi količinu</td>
+        <td></td>
+        <td>
+            <a class="btn btn bg-info">Uredi</a>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Izbriši proizvod</td>
+        <td>
+            <a class="btn btn-danger" href="/Product/Delete?ID=@Model.productID">Obrisi</a>
+
+        </td>
+    </tr>
+
+</table>
+
+

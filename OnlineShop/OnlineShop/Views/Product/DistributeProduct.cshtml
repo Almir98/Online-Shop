@@ -1,0 +1,108 @@
+﻿@using OnlineShopPodaci.Model;
+
+@{
+    ViewData["Title"] = "DistributeProduct";
+
+}
+
+<h1>Distribute Product</h1>
+
+@model DistributeProductVM
+
+<form action="SaveBranchProduct" method="post">
+
+    <input asp-for="productID" hidden />
+
+    <p>Naziv proizvoda</p>
+    <input class="form form-control" asp-for="productName" readonly />
+    <br />
+
+    <p>Proizvođač</p>
+    <input class="form form-control" asp-for="manufacturer" readonly />
+    <br />
+
+    <p>Kategorija</p>
+    <input class="form form-control" asp-for="category" readonly />
+    <br />
+
+    <p>Podkategorija</p>
+    <input class="form form-control" asp-for="subcategory" readonly />
+    <br />
+
+    <p>Cijena</p>
+    <input class="form form-control" asp-for="price" readonly />
+
+
+    <br />
+    <br />
+
+    <div id="table1">
+        <h4 class="title">Raspodjela po gradu</h4>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Naziv grada</th>
+                    <th>Kolicina po gradu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model._list.Count; i++)
+                {
+                    <tr>
+                        @Html.HiddenFor(e=>e._list[i].branchID)                 <!--asp tag helperi -->
+
+                        <td>@Html.DisplayFor(x=>x._list[i].cityname)</td>
+                        <td>
+                                @Html.TextBoxFor(x=>x._list[i].quntityPerBranch /*,new { Model._list[i].quntityPerBranch = "0" }*/) 
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary" type="submit">Spremi</button>
+    </div>
+</form>
+
+<div id="table2">
+    <h4 class="title">Pregled po skladistu</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Naziv skladista</th>
+                <th>Kolicina na skladistu</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model._stock)
+            {
+                <tr>
+                    <td>@i.stockName</td>
+                    <td>@i.stockQuanttity</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<style>
+
+    #table1 {
+        width: 40%;
+        float: left;
+        margin-bottom: 100px;
+    }
+
+    #table2 {
+        width: 40%;
+        float: left;
+        margin-left: 190px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 8px;
+    }
+</style>

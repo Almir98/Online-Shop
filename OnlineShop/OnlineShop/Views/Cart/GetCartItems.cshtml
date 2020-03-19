@@ -1,0 +1,91 @@
+﻿@model List<OnlineShop.ViewModels.LookInCartVM>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+    
+*@
+
+
+    <style>
+        input[type=number] { 
+            width:50px;
+        }     
+    </style>
+
+@if (Model.Count() == 0)
+{
+    <h5>U košarici nema artikala.</h5>
+    <br />
+    <a href="/Product/Show2">Kreni sa kupovinom.</a>
+}
+else
+{
+    <table border="1">
+        <tr>
+            <th>Šifra proizvoda</th>
+            <th>Naziv proizvoda</th>
+            <th>Kategorija</th>
+            <th>Količina</th>
+            <th>Cijena po komadu</th>
+            <th>Ukupno</th>
+            <th>Akcija</th>
+
+        </tr>
+        @foreach (var x in Model)
+        {
+    <tr id="row-@x.ProductID">
+        <td>@x.ProductNumber</td>
+        <td>@x.ProductName</td>
+        <td>@x.SubCategoryName</td>
+        <td>
+            <input id="@x.ProductID" type="number" min="1" value="@x.Quantity" />
+            <script>
+                    $("#@x.ProductID").change(function () {
+                        var x = $("#@x.ProductID").val();
+                        $.get("/Cart/SetQuantity?productid=@x.ProductID&userid=6&q=" + x, function (res) {
+                            $("#tabela").html(res);
+                        });
+                        $("#row-@x.ProductID").css({ 'background-color': '#91BD09', 'opacity': '0.95','transition':'width 2s' });
+                    });
+            </script>
+
+        </td>
+        <td>@x.UnitPrice BAM</td>
+        <td>@(x.Quantity * x.UnitPrice) BAM</td>
+        <td>
+            <button id="btn-@x.ProductID">Ukloni iz korpe</button>
+            <script>
+                        $("#btn-@x.ProductID").click(function () {
+                            $.get("/Cart/RemoveFromCart?productid=@x.ProductID&userid=6", function (Res) {
+                                $("#tabela").html(Res);
+                            });
+                        });
+            </script>
+        </td>
+    </tr>
+
+
+        }
+
+
+
+    </table> <br />
+    
+
+   <text><h3>Ukupno: @Model.Sum(s=>s.UnitPrice*s.Quantity) KM</h3></text>
+      <button id="proceed">Naruči</button> <button  style="margin:5px" id="delete">Očisti korpu</button>
+    <br />
+    <a href="/Product/Show2">Nazad na kupnju</a>
+
+
+}
+
+<script>
+    $("#delete").click(function () {
+        $.get("/Cart/DeleteCart?userid=6", function (res) {
+            $("#tabela").html(res);
+        });
+    });
+    $("#proceed").click(function () {
+        document.location = "/Order/OrderPreview?userid=6";
+    });
+</script>

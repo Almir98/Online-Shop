@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "ShowProductsInBranch";
+}
+
+@model ShowProductsInBranchVM
+
+
+<div id="header">
+
+    <h6>Poslovnica : @Model.branchName</h6>
+    <h6>Adresa : @Model.branchAdress</h6>
+    <h6>Broj telefona : @Model.branchPhoneNumber</h6>
+    <h6>Grad : @Model.branchCity</h6>
+    <h6>Radno vrijeme :  @Model.openTime - @Model.closeTime   </h6>
+
+</div>
+<br /><br />
+<div id="tablediv">
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Naziv proizvoda</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model._list)
+            {
+                <tr>
+                    <td>@i.productName</td>
+                    <td>
+                        <a class="btn btn-primary" href="/Branch/ProductDetail?productID=@i.productID">Detalji</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

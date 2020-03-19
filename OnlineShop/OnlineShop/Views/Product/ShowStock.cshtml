@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "ShowStock";
+}
+
+<h1>Show Stock</h1>
+
+@model ShowProductsInStockVM
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Naziv proizvoda</th>
+            <th>Cijena po komadu</th>
+            <th>Kolicina</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model._lista)
+        {
+            <tr>
+                <td>@i.ProductName</td>
+                <td>@i.Price  KM</td>
+                <td>@i.Quantity  kom.</td>
+                <td>
+                    <a class="btn btn-primary" href="/Product/DistributeProduct?productID=@i.ProductID">Raspodjeli</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

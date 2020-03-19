@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "ShowAllBranches";
+}
+
+<h1>ShowAllBranches</h1>
+
+@model ShowAllBranchesVM
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Naziv poslovnice</th>
+            <th>Grad</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model._list)
+        {
+            <tr>
+                <td>@i.branchName</td>
+                <td>@i.city</td>
+                <td>
+                    <a class="btn btn-primary" href="/Branch/ShowProductsInBranch?branchID=@i.branchID">Detalji</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<br /><br />
+
+<a class="btn btn-primary" href="/Branch/AddBranch">Dodaj poslovnicu</a>

@@ -1,0 +1,55 @@
+﻿@using OnlineShopPodaci.Model
+
+@{
+    ViewData["Title"] = "Registration";
+    var gradovi = ViewData["gradovi"] as List<City>;
+    var spol = ViewData["spol"] as List<Gender>;
+}
+
+<h1>Registracija racuna</h1>
+
+<form action="/Home/SaveRegistration" method="post">
+
+    <p>Ime</p>
+    <input type="text" name="name" required maxlength="30" /><br />
+
+    <p>Prezime</p>
+    <input type="text" name="surname" required maxlength="30" /><br />
+
+    <p>Datum rodjenja</p>
+    <input type="date" name="birthdate" required /><br />
+
+    <p>Odaberite grad</p>
+    <select name="cityID">
+        <option>Odaberite grad</option>
+        @foreach (City i in gradovi)
+        {
+            <option name="cityID" required maxlength="30" value="@i.CityID">@i.CityName</option>
+        }
+    </select>
+    <br />
+
+    <p>Adresa</p>
+    <input type="text" name="adresa" required maxlength="40" /><br />
+
+    <p>Email</p>
+    <input type="email" name="email" required maxlength="30" /><br />
+
+    <p>Sifra</p>
+    <input type="password" name="password" required minlength="8" maxlength="30" /><br />
+
+    <p>Ponovite sifru</p>
+    <input type="password" name="password" required minlength="8" maxlength="30" /><br />       <!-- treba napravit da su obe sifre autenticne -->
+
+    <p>Spol</p>
+    <select name="genderID">
+        <option>Odaberite spol</option>
+        @foreach(Gender g in spol)
+        {
+            <option value="@g.GenderID">@g._Gender</option>
+        }
+    </select>
+    <br />
+
+    <input type="submit" value="Registruj se" />
+</form>

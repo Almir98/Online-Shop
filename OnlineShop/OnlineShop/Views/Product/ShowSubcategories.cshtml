@@ -1,0 +1,78 @@
+﻿@using OnlineShopPodaci.Model;
+@using OnlineShop.ViewModels;
+
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+
+@model IPagedList<OnlineShop.ViewModels.ShowSubCategoriesVM>
+
+@{
+    ViewData["Title"] = "ShowSubcategories";
+}
+
+
+@*<h1>@Model.First().CategoryName</h1>*@
+<br />
+
+<style>
+    #maindiv {
+        width: 25%;
+        float: left;
+        margin: 10px;
+        padding: 0px;
+        border-radius: 5px;
+        height: 230px;
+    }
+
+        #maindiv:hover {
+            opacity: 0.9;
+        }
+
+    #test {
+        width: 42%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+
+    .pagination-container {
+        margin-top: 550px;
+
+    }
+</style>
+
+<div id="test">
+
+    @using (Html.BeginForm("ShowSubcategories", "Product", FormMethod.Get))
+    {
+        <input type="text" name="search" />
+        <input type="submit" value="Pretrazi" />
+    }
+</div>
+
+
+
+@foreach (var x in Model)
+{
+    <a href="/Product/ShowProducts?ID=@x.SubCategoryID">
+
+    <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card h-100">
+            <img class="card-img-top" src="http://placehold.it/700x400" alt="">
+            <div class="card-body">
+                <h4 style="color:blue"   class="card-title">
+                    <p>@x.SubCategoryName</p>
+                </h4>
+            </div>
+        </div>
+    </div>
+    </a>
+}
+
+<div id='Paging' style="text-align:center">
+    @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        of @Model.PageCount*@
+
+    @Html.PagedListPager(Model, page => Url.Action("ShowSubCategories", new { page, Model[0].ID }))
+</div>
+

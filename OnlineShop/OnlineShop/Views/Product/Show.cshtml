@@ -1,0 +1,44 @@
+﻿@using OnlineShopPodaci.Model;
+
+@model OnlineShop.ViewModels.SohwProductForManageLIST
+
+@{
+    ViewData["Title"] = "Show";
+
+}
+
+<h1>Prikaz svih proizvoda</h1>
+
+<table class="table table-striped">
+    <tr>
+        <th>Broj proizvoda</th>
+        <th>Naziv podkategorije</th>
+        <th>Naziv proizvodjaca</th>
+        <th>Naziv proizvoda</th>
+        <th>Opis</th>
+        <th>Cijena</th>
+    </tr>
+
+    @foreach (var p in Model.ListOfProducts)
+    {
+        <tr>
+            <td>@p.ProductNumber</td>
+            <td>@p.SubCategoryName</td>
+            <td>@p.ManufacturerName</td>
+            <td>@p.ProductName</td>
+            <td>@p.Description</td>
+            <td>@p.UnitPrice</td>
+            <td>
+                <a class="btn btn-warning" href="/Product/AddProduct?ProductID=@p.ProductID">Izmjeni</a>
+            </td>
+        </tr>
+    }
+</table>
+<br />
+
+<a class="btn btn-info" href="/Product/AddProduct">Dodaj novi proizvod</a>
+<br /><br />
+<a class="btn btn-primary" href="/Product/ShowStock">Skladiste</a>
+
+<br /><br />
+<a class="btn btn-info" href="/Branch/ShowAllBranches">Prikaz poslovnica</a>
