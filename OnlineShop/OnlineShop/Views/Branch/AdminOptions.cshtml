@@ -9,25 +9,31 @@
 
 <input asp-for="productID" hidden />
 
-<table >
+<table>
     <tr>
-        <td >Izmjeni cijenu</td>
-        <td></td>
+        <td>Uredi proizvod</td>
         <td>
-            <a class="btn btn bg-primary">Promjeni</a>
-        </td>
-    </tr>
+            <a id="quatity-@Model.productID" class="btn btn bg-info">Uredi</a>
 
-    <tr>
-        <td>Uredi količinu</td>
-        <td></td>
-        <td>
-            <a class="btn btn bg-info">Uredi</a>
+            <script>
+
+                $("#quatity-@Model.productID").click(function (event) {
+
+                    $.get("/Product/AddProduct?ProductID=@Model.productID", function (rezultat, status) {
+
+                            $("#divID").html(rezultat);
+                        });
+                   
+                });
+
+            </script>
+
         </td>
     </tr>
 
     <tr>
         <td>Izbriši proizvod</td>
+
         <td>
             <a class="btn btn-danger" href="/Product/Delete?ID=@Model.productID">Obrisi</a>
 

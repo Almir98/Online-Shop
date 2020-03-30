@@ -3,7 +3,7 @@
     ViewData["Title"] = "ProductDetails2";
 }
 
-<h1>Product Details</h1>
+<h1>Detalji proizvoda</h1>
 
 @model ProductDetails2VM
 
@@ -49,11 +49,19 @@
 
         $("#show").click(function () {
 
-            $.get("/Branch/AdminOptions?productID=@Model.productID", function (rezultat, status) {
+            if ($(this).val() == "Prikazi") {
+                $("#divID").show();
+                $(this).val("Uvuci");
 
-                $("#divID").html(rezultat);
-            });
+                $.get("/Branch/AdminOptions?productID=@Model.productID", function (rezultat, status) {
+                    $("#divID").html(rezultat);
+                });
+            }
+            else
+            {
+                $("#divID").hide();
+                $(this).val("Prikazi");
+            }
         });
     });
-
 </script>

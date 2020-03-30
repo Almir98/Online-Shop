@@ -45,6 +45,7 @@ namespace OnlineShop.Controllers
             ).ToList();
             return PartialView(listavm);
         }
+      
 
 
         public IActionResult RemoveFromCart(int productid, int userid)

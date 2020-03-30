@@ -10,7 +10,7 @@ namespace OnlineShopServices
 {
     public class BranchService : IBranch
     {
-        protected OnlineShopContext _context;
+        private readonly OnlineShopContext _context;
 
         public BranchService(OnlineShopContext context)
         {
@@ -24,7 +24,7 @@ namespace OnlineShopServices
 
         public Branch GetBranchByID(int id)
         {
-            return GetAllBranches().Where(e => e.BranchID == id).FirstOrDefault();
+            return _context.branch.Where(e => e.BranchID == id).Include(e=>e.City).FirstOrDefault();
         }
 
         public void AddBranch(Branch branch)

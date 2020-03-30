@@ -76,7 +76,6 @@ namespace OnlineShop.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-           
             return View();
         }
 
@@ -94,4 +93,5 @@ namespace OnlineShop.Controllers
             return View(model);
         }
     }
+
 }

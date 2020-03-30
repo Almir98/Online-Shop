@@ -8,15 +8,15 @@ namespace OnlineShop.Controllers
 {
     public class BranchController : Controller
     {
-        private IBranch _branch;
-        private IProduct _product;
-        private OnlineShopContext _database;
+        private readonly IBranch _branch;
+        private readonly IProduct _product;
+        private readonly OnlineShopContext _context;
 
         public BranchController(IBranch branch,IProduct product,OnlineShopContext context)
         {
             _branch = branch;
             _product = product;
-            _database = context;
+            _context = context;
         }
 
         public IActionResult ShowAllBranches()
@@ -29,7 +29,7 @@ namespace OnlineShop.Controllers
                 {
                     branchID = e.BranchID,
                     branchName = e.BranchName,
-                    //city = e.City.CityName            // puca
+                    city =_context.city.Where(x=>x.CityID==e.CityID).Select(a=>a.CityName).FirstOrDefault()            
                 }).ToList()
             };
             return View(model);
@@ -38,7 +38,7 @@ namespace OnlineShop.Controllers
         public IActionResult ShowProductsInBranch(int branchID)
         {
             var branch = _branch.GetBranchByID(branchID);
-            var products =_database.branchproduct.Where(e=>e.BranchID== branchID).Select(e=>e.Product).ToList();
+            var products = _context.branchproduct.Where(e=>e.BranchID== branchID).Select(e=>e.Product).ToList();
 
             var model = new ShowProductsInBranchVM
             {
@@ -46,7 +46,7 @@ namespace OnlineShop.Controllers
                 branchName=branch.BranchName,
                 branchAdress=branch.Adress,
                 branchPhoneNumber=branch.PhoneNumber,
-                //branchCity=branch.City.CityName, // ???
+                branchCity=_context.city.Where(e=>e.CityID==branch.CityID).Select(e=>e.CityName).FirstOrDefault(),
                 openTime=branch.Open,
                 closeTime=branch.Close,
 
@@ -63,7 +63,7 @@ namespace OnlineShop.Controllers
         {
             var product = _product.GetProductByID(productID);
 
-            var branchproduct = _database.branchproduct.Where(e => e.ProductID == productID).FirstOrDefault();
+            var branchproduct = _context.branchproduct.Where(e => e.ProductID == productID).FirstOrDefault();
 
             var model = new ProductDetails2VM
             {
@@ -91,7 +91,7 @@ namespace OnlineShop.Controllers
         {
             var model = new AddBranchVM
             {
-                _cities=_database.city.Select(e=>new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                _cities= _context.city.Select(e=>new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
                     Value=e.CityID.ToString(),
                     Text=e.CityName
@@ -115,5 +115,9 @@ namespace OnlineShop.Controllers
 
             return Redirect("/Branch/ShowAllBranches");
         }
+
+
+
+
     }
 }

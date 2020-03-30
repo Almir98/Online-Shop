@@ -15,11 +15,9 @@ namespace OnlineShop.Controllers
 {
     public class ProductController : Controller
     {
-        private IProduct Iproduct;
-
-        private OnlineShopContext _database;
+        private readonly IProduct Iproduct;
+        private readonly OnlineShopContext _database;
         private readonly IHostingEnvironment hosting;
-
 
         public ProductController(IProduct p, OnlineShopContext b, IHostingEnvironment hostingEnvironment)
         {
@@ -27,6 +25,7 @@ namespace OnlineShop.Controllers
             _database = b;
             hosting = hostingEnvironment;
         }
+
 
         public IActionResult Index()
         {
@@ -52,7 +51,7 @@ namespace OnlineShop.Controllers
         public IActionResult Delete(int ID)
         {
             Iproduct.RemoveProduct(ID);
-            return Redirect("/Product/Show");
+            return Redirect("/Branch/ShowAllBranches");
         }
 
         private string SaveFile(IFormFile file)
@@ -111,7 +110,7 @@ namespace OnlineShop.Controllers
                 if (model.ProductID == 0)
                 {
                     neki = new Product();
-                    _database.product.Add(neki);
+                    Iproduct.AddProduct(neki);
                 }
                 else
                     neki = _database.product.Find(model.ProductID);
@@ -125,19 +124,20 @@ namespace OnlineShop.Controllers
                 neki.UnitPrice = model.UnitPrice;
                 neki.UnitsInStock = model.UnitsInStock;
 
-                Iproduct.AddProduct(neki);
-
                 _database.SaveChanges();        // da bi proizvod dobio svoj id ! 
 
+                if (model.ProductID != neki.ProductID)
+                {
                     var st_pr = new StockProduct            // medjutabela
                     {
-                        StockID = 1,                  // jer je samo 1 skladiste
+                        StockID = 5,                  // jer je samo 1 skladiste
                         ProductID = neki.ProductID,
                         Quantity = neki.UnitsInStock
                     };
                     _database.Add(st_pr);
+                    _database.SaveChanges();
+                }
             }
-            _database.SaveChanges();
             return Redirect("/Product/Show");
         }
 
@@ -158,6 +158,7 @@ namespace OnlineShop.Controllers
             _database.manufacturer.Add(manufacturer);
             _database.SaveChanges();
             return Redirect($"/Product/AddProduct?={ProductID}");
+
         }
 
         public IActionResult Show2()       
@@ -215,6 +216,7 @@ namespace OnlineShop.Controllers
 
             return View(model);
         }
+
 
         public IActionResult ShowStock()
         {

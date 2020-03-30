@@ -45,15 +45,21 @@
 
     #rightFooter{
 
-
-
     }
 
-    #image{
-        width:80%;
-        height:80%;
+    #imagediv2{
+        width:70%;
+        height:60%;
         background-color:white;
-        margin:55px;
+        margin:50px;
+    }
+
+    #picture{
+         max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto\9;
+        object-fit: cover;
     }
 
 </style>
@@ -62,8 +68,8 @@
 
 <div id="mainDiv">
     <div id="leftDiv">
-        <div id="image">
-            <img src="~/images/@(Model.ImageUrl)" />
+        <div id="imagediv2">
+            <img id="picture" src="~/images/@(Model.ImageUrl)" />
 
         </div>
         @*<img src="/partners@(item.AdPath)" alt="" id="adimg"
@@ -90,7 +96,6 @@
                 DODAJ U KORPU
 
             </div>
-
         </div>
 </div>
 

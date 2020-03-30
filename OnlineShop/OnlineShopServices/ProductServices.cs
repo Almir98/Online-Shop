@@ -10,7 +10,7 @@ namespace OnlineShopServices
 {
     public class ProductServices:IProduct
     {
-        private OnlineShopContext _context;
+        private readonly OnlineShopContext _context;
         public ProductServices(OnlineShopContext b)
         {
             _context = b;
@@ -19,7 +19,7 @@ namespace OnlineShopServices
         public void AddProduct(Product p)
         {
             _context.Add(p);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public List<Product> GetAllProducts()

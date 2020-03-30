@@ -41,10 +41,6 @@ namespace OnlineShop.Controllers
             };
             return View(model);
         }
-
-
-
-
         public IActionResult Index()
         {
             return View();
