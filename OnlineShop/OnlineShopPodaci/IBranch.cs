@@ -7,6 +7,7 @@ namespace OnlineShopPodaci
 {
     public interface IBranch
     {
+        //test
         List<Branch> GetAllBranches();
 
         void AddBranch(Branch branch);
