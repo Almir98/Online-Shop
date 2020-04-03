@@ -18,14 +18,17 @@
     <tbody>
         @foreach (var i in Model._lista)
         {
-            <tr>
-                <td>@i.ProductName</td>
-                <td>@i.Price  KM</td>
-                <td>@i.Quantity  kom.</td>
-                <td>
-                    <a class="btn btn-primary" href="/Product/DistributeProduct?productID=@i.ProductID">Raspodjeli</a>
-                </td>
+            if (i.Quantity > 0)
+            {
+                <tr>
+                    <td>@i.ProductName</td>
+                    <td>@i.Price  KM</td>
+                    <td>@i.Quantity  kom.</td>
+                    <td>
+                        <a class="btn btn-primary" href="/Product/DistributeProduct?productID=@i.ProductID">Raspodjeli</a>
+                    </td>
             </tr>
+            }
         }
     </tbody>
 </table>

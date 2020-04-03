@@ -23,6 +23,8 @@ namespace OnlineShop.ViewModels
         {
             public int productID { get; set; }
             public string productName { get; set; }
+            public string imageUrl { get; set; }
+
 
             // moze se dodat 
 

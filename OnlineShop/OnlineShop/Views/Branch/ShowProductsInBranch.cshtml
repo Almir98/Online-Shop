@@ -5,8 +5,53 @@
 
 @model ShowProductsInBranchVM
 
+    <style>
+
+        #maindiv {
+            width: 25%;
+            float: left;
+            margin: 10px;
+            padding: 0px;
+            border-radius: 5px;
+            height:330px;
+        }
+
+        #maindiv:hover {
+            opacity: 0.92;
+        }
+
+        #imagediv {
+            width: auto;
+            height: auto;
+            display: flex;
+            max-height:210px;       /*ako je fiksira height pokvari se rezolucija,a auto  porementi naslov u divu,treba pogledat jos oko ovog !!*/
+        }
+
+        #slika {
+            max-width: 100%;
+            max-height: 100%;
+            height: auto;
+            width: auto\9;
+            object-fit: cover;
+        }
+
+        .title{
+            text-align:center;
+        }
+        
+        .card-body {
+            height: 60px;
+        }
+
+        .button {
+            height: 60px;
+        }
+
+    </style>
 
 <div id="header">
+
+    <input asp-for="branchID" hidden />
 
     <h6>Poslovnica : @Model.branchName</h6>
     <h6>Adresa : @Model.branchAdress</h6>
@@ -16,26 +61,30 @@
 
 </div>
 <br /><br />
-<div id="tablediv">
+      <div id="tablediv">
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Naziv proizvoda</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var i in Model._list)
-            {
-                <tr>
-                    <td>@i.productName</td>
-                    <td>
-                        <a class="btn btn-primary" href="/Branch/ProductDetail?productID=@i.productID">Detalji</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+          @foreach (var i in Model._list)
+          {
+              @*<a href="/Branch/ProductDetail?productID=@i.productID&branchID=@Model.branchID">*@
+
+              <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                  <div class="card h-100">
+
+                      <div id="imagediv">
+                          <img id="slika" src="~/images/@i.imageUrl" alt="">
+                      </div>
+
+                      <div class="card-body">
+                          <h4 class="title">@i.productName</h4>
+                      </div>
+                      <div class="button">
+                          <h4 class="title" style="color: blue">
+                              <a class="btn btn-primary" href="/Branch/ProductDetail?productID=@i.productID&branchID=@Model.branchID">Detalji</a>
+                          </h4>
+                      </div>
+                  </div>
+              </div>
+              @*</a>*@
+}
+      </div>
 

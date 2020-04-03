@@ -53,17 +53,18 @@ namespace OnlineShop.Controllers
                 _list=products.Select(e=>new ShowProductsInBranchVM.rows
                 {
                     productID=e.ProductID,
-                    productName=e.ProductName
+                    productName=e.ProductName,
+                    imageUrl=_context.product.Where(a=>a.ProductID==e.ProductID).Select(a=>a.ImageUrl).FirstOrDefault()
                 }).ToList()
             };
             return View(model);
         }
 
-        public IActionResult ProductDetail(int productID)
+        public IActionResult ProductDetail(int productID,int branchID)
         {
             var product = _product.GetProductByID(productID);
 
-            var branchproduct = _context.branchproduct.Where(e => e.ProductID == productID).FirstOrDefault();
+            var branchproduct = _context.branchproduct.Where(e => e.ProductID == productID && e.BranchID==branchID).FirstOrDefault();
 
             var model = new ProductDetails2VM
             {
@@ -115,9 +116,6 @@ namespace OnlineShop.Controllers
 
             return Redirect("/Branch/ShowAllBranches");
         }
-
-
-
 
     }
 }

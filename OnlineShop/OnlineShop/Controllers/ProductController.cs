@@ -275,19 +275,19 @@ namespace OnlineShop.Controllers
             foreach (var i in model._list)
             {
                 var bp = _database.branchproduct.Where(e => e.BranchID == i.branchID).FirstOrDefault();
-                if (model.productID == bp.ProductID)
+                if (bp!=null && model.productID == bp.ProductID)
                 {
                     bp.UnitsInBranch += i.quntityPerBranch;
                 }
                 else
                 {
-                    var testing = new BranchProduct
-                    {
-                        BranchID = i.branchID,
-                        ProductID = product.ProductID,
-                        UnitsInBranch = i.quntityPerBranch,
-                    };
-                _database.Add(testing);
+                   var testing = new BranchProduct
+                   {
+                       BranchID = i.branchID,
+                       ProductID = product.ProductID,
+                       UnitsInBranch = i.quntityPerBranch,
+                   };
+                   _database.Add(testing);
                 }
                 sum = sum + i.quntityPerBranch;        // sabiraju se kolicine po prodavnicama
             }
