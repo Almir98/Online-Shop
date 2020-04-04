@@ -16,17 +16,17 @@
     <input asp-for="ProductID" value="@Model.ProductID" style="display:none" />
 
 
-    <p>Broj proizvoda</p>
+    <p>Šifra proizvoda :</p>
     <input class="form-control" type="text" asp-for="ProductNumber" value="@Model.ProductNumber" required />
     <br />
 
-    <p>Podkategorija</p>
+    <p>Podkategorija :</p>
     <select class="form-control" asp-for="SubCategoryID" asp-items="@Model.Subcategories" required>
         <option>Odaberite podkategoriju proizvoda</option>
     </select>
     <br />
 
-    <p>Proizvodjac</p>
+    <p>Proizvođač :</p>
     <select class="form-control" asp-for="ManufacturerID" asp-items="@Model.Manufacturers" required>
         <option>Odaberite proizvodjaca</option>
     </select>
@@ -35,27 +35,28 @@
     <a href="/Product/AddManufacturer?ProductID=@Model.ProductID">Dodaj novog proizvodjaca</a>
 
     <br />
-    <p>Naziv proizvoda</p>
+    <p>Naziv proizvoda :</p>
     <input class="form-control" type="text" asp-for="ProductName" value="@Model.ProductName" required />
     <br />
 
-    <p>URL slike</p>
+    <p>URL slike:</p>
     <div class="custom-file">
         <input asp-for="Image" class="form-control custom-file-input" value="@Model.Image" /><br />
 
         <label class="custom-file-label">Izaberi sliku</label>
     </div>
 
-    <p>Opis</p>
-    <input class="form-control" type="text" style="width:1100px; height:150px;" asp-for="Description" value="@Model.Description" />
+    <p>Detaljan opis:</p>
+    <textarea rows="6" cols="90" class="form-control" asp-for="Description" value="@Model.Description">
+    </textarea>
     <br />
 
-    <p>Cijena</p>
-    <input class="form-control" type="text" asp-for="UnitPrice" value="@Model.UnitPrice"  required />
+    <p>Cijena :</p>
+    <input class="form-control" type="text" asp-for="UnitPrice" value="@Model.UnitPrice" required />
     <br /><br />
 
-    <p>Količina</p>
-    <input asp-for="UnitsInStock" class="form-control" min="0"  placeholder="0" required />
+    <p>Količina :</p>
+    <input asp-for="UnitsInStock" class="form-control" min="0" placeholder="0" required />
     <br />
 
     <input class="btn btn-primary" type="submit" value="POTVRDI" />

@@ -11,39 +11,34 @@
 
 <style>
     #mainDiv{
-        height:520px;
-        border:1px solid black;
-        background-color:red;
+        height:555px;
         margin:auto;
     }
 
     #leftDiv{
-        background-color:gray;
         float:left;
-        height:520px;
+        height:555px;
         width:50%;
     }
     
     #rightDiv{
-        background-color:yellow;
         float:left;
-        height:520px;
+        height:555px;
         width:50%;
     }
 
     #title {
-        background-color:aqua;
         width:100%;
         height:120px;
     }
 
     #rightContent{
         width:100%;
-        height:250px;
-        background-color:bisque;
+        height:300px;
     }
 
     #rightFooter{
+        height:70px;
 
     }
 
@@ -52,14 +47,35 @@
         height:60%;
         background-color:white;
         margin:50px;
+        height:auto;
+        width:auto;
     }
 
     #picture{
-         max-width: 100%;
-        max-height: 100%;
+         max-width: 95%;
+        max-height: 90%;
+        margin:auto;
         height: auto;
         width: auto\9;
         object-fit: cover;
+    }
+
+    #rightContent{
+        width:100%;
+        height:350px;
+        text-align:left;
+    }
+
+    #textarea {
+        width: 100%;
+        height: 300px;
+        text-align: left;
+        overflow:hidden;
+        resize: none;
+    }
+
+    #button:hover {
+        cursor: default;
     }
 
 </style>
@@ -77,30 +93,26 @@
     </div>
         <div id="rightDiv">
             <div id="title">
-
-                <h1>@Model.ProductName</h1>
+                <input asp-for="ProductID" hidden />
+                <h2>@Model.ProductName</h2>
                 <h4>Proizvođač : @Model.ManufacturerName</h4>
-                <p>Ime podkategorije : @Model.SubCategoryName</p>
-                
-                
+                <h6>Stanje :  
+                <input id="button" type="button" readonly class="btn btn-success" value="Novo" />
+                </h6>
             </div>
             <div id="rightContent">
-                ovdje detaljan opis
+                <p style="text-align: left;"><b>Opis proizvoda :</b></p>
+                <textarea id="textarea" readonly style="border:none">
                 @Model.Description
-                na stanju
+                </textarea>
             </div>
             <div id="rightFooter">
 
-                <p>Cijena: @Model.UnitPrice KM</p>
+                <h5>Cijena: @Model.UnitPrice KM sa  PDV-om</h5>
+                <button class="btn btn-primary" onclick="AddToCart(@Model.ProductID)">Dodaj u korpu</button>
 
-                DODAJ U KORPU
 
             </div>
         </div>
 </div>
-
-
-
-
-
 

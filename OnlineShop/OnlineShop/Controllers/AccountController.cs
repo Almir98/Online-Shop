@@ -80,13 +80,16 @@ namespace OnlineShop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM model)
+        public async Task<IActionResult> Login(LoginVM model,string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email,model.Password,model.RememberMe,false);
                 if (result.Succeeded)
-                    return RedirectToAction("Index", "Home");
+                    if (!string.IsNullOrEmpty(returnUrl))
+                        return LocalRedirect(returnUrl);
+                    else
+                        return RedirectToAction("Index", "Home");
                 
                 ModelState.AddModelError("", "Neuspješan pokušaj prijave!");
             }
