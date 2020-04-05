@@ -55,21 +55,30 @@
     #imagediv{
         width:auto;
         height: auto;
-
-
         display: flex;
+        height:170px;
     }
 
-    #slika{
+    #header {
+        height:70px;
+    }
+
+    #content{
+            height: 60px;
+
+    }
+
+    #button{
+        text-align:center;
+    }
+
+    #slika {
         max-width: 100%;
         max-height: 100%;
         height: auto;
         width: auto\9;
         object-fit: cover;
-
     }
-
-
 </style>
 
 
@@ -95,17 +104,23 @@
             </div>
 
             <div  class="card-body">
-                <a style="color:blue" id="title" href="/Product/ProductDetails?ID=@o.productID">
+                <div id="header">
+                    <a style="color: blue " id="title" href="/Product/ProductDetails?ID=@o.productID">
+                        <h4  class="card-title">
+                            @o.productName
+                        </h4>
+                    </a>
+                </div>
+                <div id="content">
 
-                    <h4  class="card-title">
-                        @o.productName
-                    </h4>
-                </a>
                     <p class="card-text">Cijena : @o.unitPrice   KM</p>
                     <p class="card-text">Proizvođač : @o.manufacturerName</p>
                     <input type="number" id="@o.productID" value="1" min="1" />
                     <br><br />
-                    <button class="btn btn-primary" onclick="AddToCart(@o.productID)">Dodaj u košaricu</button>
+                    <div id="button">
+                        <button class="btn btn-primary" onclick="AddToCart(@o.productID)">Dodaj u košaricu</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -129,6 +144,5 @@
 
         //alert("Proizvod dodan u korpu !");
     }
-
 
 </script>

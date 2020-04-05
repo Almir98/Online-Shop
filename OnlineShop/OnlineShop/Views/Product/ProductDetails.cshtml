@@ -102,15 +102,12 @@
             </div>
             <div id="rightContent">
                 <p style="text-align: left;"><b>Opis proizvoda :</b></p>
-                <textarea id="textarea" readonly style="border:none">
-                @Model.Description
-                </textarea>
+                <textarea id="textarea" readonly style="border:none">@Model.Description</textarea>
             </div>
             <div id="rightFooter">
 
                 <h5>Cijena: @Model.UnitPrice KM sa  PDV-om</h5>
                 <button class="btn btn-primary" onclick="AddToCart(@Model.ProductID)">Dodaj u korpu</button>
-
 
             </div>
         </div>

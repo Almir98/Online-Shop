@@ -52,12 +52,12 @@
     <br />
 
     <p>Cijena :</p>
-    <input class="form-control" type="text" asp-for="UnitPrice" value="@Model.UnitPrice" required />
-    <br /><br />
-
-    <p>Količina :</p>
-    <input asp-for="UnitsInStock" class="form-control" min="0" placeholder="0" required />
+    <input class="form-control" type="text" asp-for="UnitPrice" min="0" required />
     <br />
 
-    <input class="btn btn-primary" type="submit" value="POTVRDI" />
+    <p>Količina :</p>
+    <input asp-for="UnitsInStock" class="form-control" min="0" required />
+    <br />
+
+    <input class="btn btn-primary" type="submit" value="Sačuvaj" />
 </form>

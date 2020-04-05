@@ -130,7 +130,7 @@ namespace OnlineShop.Controllers
                 {
                     var st_pr = new StockProduct            // medjutabela
                     {
-                        StockID = 5,                  // jer je samo 1 skladiste
+                        StockID = 5,                                                                         // jer je samo 1 skladiste
                         ProductID = neki.ProductID,
                         Quantity = neki.UnitsInStock
                     };
