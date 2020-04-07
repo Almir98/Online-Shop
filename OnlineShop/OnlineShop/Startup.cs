@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineShopPodaci;
+using OnlineShopPodaci.Hubs;
 using OnlineShopPodaci.Model;
 using OnlineShopServices;
 
@@ -34,11 +35,14 @@ namespace OnlineShop
                  options.User.RequireUniqueEmail = true;
              }).AddEntityFrameworkStores<OnlineShopContext>();
             
-            
+            services.AddSignalR();
+
             services.AddScoped<IProduct, ProductServices>();
             services.AddScoped<ICart, CartServices>();
             services.AddScoped<IOrder, OrderServices>();
             services.AddScoped<IBranch, BranchService>();
+            services.AddScoped<INotification, NotificationService>();
+
             services.AddDbContext<OnlineShopContext>(c => c.UseSqlServer(Configuration.GetConnectionString("OnlineShopCS")));
         }
 
@@ -55,17 +59,18 @@ namespace OnlineShop
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationHub>("/notification");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

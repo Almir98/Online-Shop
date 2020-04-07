@@ -19,6 +19,9 @@
 
     <script type='text/javascript' data-cfasync='false'>window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({ c: '5d0ac46b-cc60-4eea-8534-5aeaf7ee35fc', f: true }); done = true; } }; })();</script>
 
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.css" />
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
+
 </head>
 <body>
     <header>
@@ -46,7 +49,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="LookInCart">Pogledaj kosaricu</a>
                         </li>
-                       
+
                     </ul>
                     <ul class="navbar-nav ml-auto">
                         @if (signInManager.IsSignedIn(User))
@@ -87,7 +90,42 @@
             &copy; 2019 - OnlineShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    
+
+    <script src="~/vendor/jquery-3.2.1.min.js"></script>
+    <script src="~/lib/aspnet-signalr/signalr.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+
+
+
+
+    <script>
+        "use strict"
+
+        $(document).ready(() => {
+            let connection = new signalR.HubConnectionBuilder().withUrl("/notification").build();
+
+            connection.on("OnMessageReceived", (message) => {
+                console.log(message);
+
+                toastr.options = {
+                    "positionClass": "toast-bottom-right",
+                    "timeOut": "5000"
+                };
+
+                toastr.info(message);
+            });
+
+            connection.start().then(() => console.log('SignalR connection started...')).catch(err => console.error(err));
+
+            // Client side real time notification invoking
+            //$('body').on('submit', '#DodajRadniList', ev => {
+            //    ev.preventDefault();
+            //    connection.invoke("SendNotification", `Uspjesno dodan radni list za dan ${new Date().toISOString().slice(0, 10)}`);
+            //});
+        });
+    </script>
+
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

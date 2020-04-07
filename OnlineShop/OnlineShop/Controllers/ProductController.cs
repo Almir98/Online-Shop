@@ -8,8 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.ViewModels;
 using OnlineShopPodaci;
+using OnlineShopPodaci.Hubs;
 using OnlineShopPodaci.Model;
 using X.PagedList;
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Controllers
 {
@@ -19,11 +22,16 @@ namespace OnlineShop.Controllers
         private readonly OnlineShopContext _database;
         private readonly IHostingEnvironment hosting;
 
-        public ProductController(IProduct p, OnlineShopContext b, IHostingEnvironment hostingEnvironment)
+        private  INotification _notificationService;
+
+
+
+        public ProductController(IProduct p, OnlineShopContext b, IHostingEnvironment hostingEnvironment, INotification notification)
         {
             Iproduct = p;
             _database = b;
             hosting = hostingEnvironment;
+            _notificationService = notification;
         }
 
 
@@ -68,6 +76,7 @@ namespace OnlineShop.Controllers
             }
             return null;
         }
+
         
         public IActionResult AddProduct(int ProductID)
         {
@@ -93,7 +102,8 @@ namespace OnlineShop.Controllers
             return View(data);
         }
 
-        public IActionResult SaveProduct(AddOrUpdateProductVM model)
+        [HttpPost]
+        public async Task<IActionResult> SaveProduct(AddOrUpdateProductVM model)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +115,6 @@ namespace OnlineShop.Controllers
                     string filePath = Path.Combine(uploadsFolder, uniquefileName);
                     model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
-
                 Product neki;
                 if (model.ProductID == 0)
                 {
@@ -124,8 +133,7 @@ namespace OnlineShop.Controllers
                 neki.UnitPrice = model.UnitPrice;
                 neki.UnitsInStock = model.UnitsInStock;
 
-                _database.SaveChanges();        // da bi proizvod dobio svoj id ! 
-
+                await _database.SaveChangesAsync();        // da bi proizvod dobio svoj id ! 
                 if (model.ProductID != neki.ProductID)
                 {
                     var st_pr = new StockProduct            // medjutabela
@@ -135,9 +143,10 @@ namespace OnlineShop.Controllers
                         Quantity = neki.UnitsInStock
                     };
                     _database.Add(st_pr);
-                    _database.SaveChanges();
+                    await _database.SaveChangesAsync();
                 }
             }
+            await _notificationService.SendNotification($"Dodan je novi artikal ovoo je testttttttttttttttttttttttttttttt");
             return Redirect("/Product/Show");
         }
 
