@@ -4,8 +4,8 @@
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
 
-
 @model IPagedList<OnlineShop.ViewModels.ShowSubCategoriesVM>
+
 
 @{
     ViewData["Title"] = "ShowSubcategories";
@@ -37,35 +37,26 @@
 
     .pagination-container {
         margin-top: 550px;
-
     }
 </style>
 
-<div id="test">
 
-    @using (Html.BeginForm("ShowSubcategories", "Product", FormMethod.Get))
-    {
-        <input type="text" name="search" />
-        <input type="submit" value="Pretrazi" />
-    }
-</div>
-
-
+<h5>@ViewBag.Name</h5>
 
 @foreach (var x in Model)
 {
-    <a href="/Product/ShowProducts?ID=@x.SubCategoryID">
+    <a href="/Product/ShowProducts?ID=@x.SubCategoryID" &string="">
 
-    <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
-        <div class="card h-100">
-            <img class="card-img-top" src="http://placehold.it/700x400" alt="">
-            <div class="card-body">
-                <h4 style="color:blue"   class="card-title">
-                    <p>@x.SubCategoryName</p>
-                </h4>
+        <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="http://placehold.it/700x400" alt="">
+                <div class="card-body">
+                    <h4 style="color:blue" class="card-title">
+                        <p>@x.SubCategoryName</p>
+                    </h4>
+                </div>
             </div>
         </div>
-    </div>
     </a>
 }
 

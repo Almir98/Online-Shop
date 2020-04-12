@@ -1,0 +1,69 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/administratorEdit.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+
+</head>
+<body>
+    <div>
+        <div class="menu-bar">
+            <ul>
+                <li class="aktivna"><a href="/Administration/Index"><i class="fa fa-home"></i>Admin home page</a></li>
+                <li><a href="#"><i class="fa fa-user-secret" aria-hidden="true"></i>Administratori</a></li>
+                <li><a href="/Administration/ListOfCustomers"><i class="fa fa-users"></i>Registrovani korisnici</a></li>
+                <li>
+                    <a href="#"><i class="fa fa-television" aria-hidden="true"></i>Proizvodi</a>
+                    <div class="sub-menu-proizvod">
+                        <ul>
+                            <li><a href="/Product/Show"><i class="fa fa-list" aria-hidden="true"></i>Lista proizvoda</a></li>
+                            <li><a href="/Product/AddProduct"><i class="fa fa-plus-square" aria-hidden="true"></i>Dodaj novi proizvod</a></li>
+                        </ul>
+                    </div>
+
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i>Poslovnice</a>
+                    <div class="sub-menu-proizvod">
+                        <ul>
+                            <li><a href="/Branch/ShowAllBranches"><i class="fa fa-list" aria-hidden="true"></i>Lista poslovnica</a></li>
+                            <li><a href="/Branch/AddBranch"><i class="fa fa-plus-square" aria-hidden="true"></i>Dodaj novu poslovnicu</a></li>
+                        </ul>
+                    </div>
+
+                </li>
+                <li><a href="/Product/ShowStock"><i class="fa fa-archive" aria-hidden="true"></i>Skladište</a></li>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    <li class="odjavaL">
+                        <form method="post" asp-action="Logout" asp-controller="Account">
+                            <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
+                                Odjavi se, @User.Identity.Name
+                            </button>
+
+                        </form>
+                    </li>
+                }
+
+            </ul>
+        </div>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+</body>
+</html>

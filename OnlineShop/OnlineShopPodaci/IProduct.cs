@@ -9,10 +9,11 @@ namespace OnlineShopPodaci
     {
         void AddProduct(Product p);
         List<Product> GetAllProducts();
+        
         Product GetProductByID(int id);
+        SubCategory GetSubCategoryID(int id);
+        Category GetCategoryID(int id);
 
         void RemoveProduct(int id);
-
-        //test
     }
 }

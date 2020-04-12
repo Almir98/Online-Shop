@@ -16,12 +16,15 @@ namespace OnlineShop.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private OnlineShopContext _db;
+        private readonly RoleManager<Role> roleManager;
 
-        public AccountController(UserManager<User> userManager,SignInManager<User> signInManager,OnlineShopContext db)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, OnlineShopContext db, 
+            RoleManager<Role>roleManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             _db = db;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]       
@@ -58,6 +61,9 @@ namespace OnlineShop.Controllers
                 if(result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
+                    var role = await roleManager.FindByIdAsync(1.ToString());
+                    await userManager.AddToRoleAsync(user, role.Name);
+
                     return RedirectToAction("Index", "Home");
                 }
                 foreach (var err in result.Errors)
@@ -88,9 +94,15 @@ namespace OnlineShop.Controllers
                 if (result.Succeeded)
                     if (!string.IsNullOrEmpty(returnUrl))
                         return LocalRedirect(returnUrl);
-                    else
-                        return RedirectToAction("Index", "Home");
-                
+                    else 
+                    {
+                        var user = await userManager.FindByNameAsync(model.Email);
+                        if (await userManager.IsInRoleAsync(user, "Customer"))
+                            return RedirectToAction("Index", "Home");
+                        else
+                            return RedirectToAction("Index", "Administration");
+                    }
+
                 ModelState.AddModelError("", "Neuspješan pokušaj prijave!");
             }
             return View(model);

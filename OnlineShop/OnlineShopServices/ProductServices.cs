@@ -26,9 +26,20 @@ namespace OnlineShopServices
         {
             return _context.product.Include(p => p.SubCategory).Include(p => p.Manufacturer).Include(e=>e.SubCategory.Category). ToList();
         }
+
+        public Category GetCategoryID(int id)
+        {
+            return _context.category.Where(e=>e.CategoryID==id).FirstOrDefault();
+        }
+
         public Product GetProductByID(int id)
         {
             return GetAllProducts().Where(p => p.ProductID == id).FirstOrDefault();
+        }
+
+        public SubCategory GetSubCategoryID(int id)
+        {
+            return _context.subcategory.Where(e=>e.SubCategoryID==id).FirstOrDefault();
         }
 
         public void RemoveProduct(int id)
@@ -36,7 +47,5 @@ namespace OnlineShopServices
             _context.Remove(GetProductByID(id));
             _context.SaveChanges();
         }
-
-
     }
 }

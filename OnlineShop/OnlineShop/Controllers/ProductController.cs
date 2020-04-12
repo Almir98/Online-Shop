@@ -13,12 +13,13 @@ using OnlineShopPodaci.Model;
 using X.PagedList;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace OnlineShop.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProduct Iproduct;
+        private readonly IProduct _Iproduct;
         private readonly OnlineShopContext _database;
         private readonly IHostingEnvironment hosting;
 
@@ -28,7 +29,7 @@ namespace OnlineShop.Controllers
 
         public ProductController(IProduct p, OnlineShopContext b, IHostingEnvironment hostingEnvironment, INotification notification)
         {
-            Iproduct = p;
+            _Iproduct = p;
             _database = b;
             hosting = hostingEnvironment;
             _notificationService = notification;
@@ -41,7 +42,7 @@ namespace OnlineShop.Controllers
         }
         public IActionResult Show()
         {
-            var proizvodi = Iproduct.GetAllProducts();
+            var proizvodi = _Iproduct.GetAllProducts();
             var productForView = proizvodi.Select(p => new ShowProductForManage
             {
                 ProductID = p.ProductID,
@@ -58,7 +59,7 @@ namespace OnlineShop.Controllers
 
         public IActionResult Delete(int ID)
         {
-            Iproduct.RemoveProduct(ID);
+            _Iproduct.RemoveProduct(ID);
             return Redirect("/Branch/ShowAllBranches");
         }
 
@@ -119,7 +120,7 @@ namespace OnlineShop.Controllers
                 if (model.ProductID == 0)
                 {
                     neki = new Product();
-                    Iproduct.AddProduct(neki);
+                    _Iproduct.AddProduct(neki);
                 }
                 else
                     neki = _database.product.Find(model.ProductID);
@@ -146,7 +147,7 @@ namespace OnlineShop.Controllers
                     await _database.SaveChangesAsync();
                 }
             }
-            await _notificationService.SendNotification($"Dodan je novi artikal ovoo je testttttttttttttttttttttttttttttt");
+            await _notificationService.SendNotification($"Dodan je novi artikal ili je izmjenjen postojeći");
             return Redirect("/Product/Show");
         }
 
@@ -179,6 +180,10 @@ namespace OnlineShop.Controllers
 
         public IActionResult ShowSubcategories(int id,string search,int? page)          // ID kategorije
         {
+
+            var product = _Iproduct.GetCategoryID(id);
+            ViewBag.Name = product.CategoryName;
+
             var c = _database.subcategory.Where(s => s.CategoryID == id).
                 Select(s => new ShowSubCategoriesVM
                 {
@@ -187,15 +192,36 @@ namespace OnlineShop.Controllers
                     SubCategoryID = s.SubCategoryID,
                     SubCategoryName = s.SubCategoryName,
                     imageurl=s.ImageUrl
-                }).Where(e => e.SubCategoryName.StartsWith(search) || search == null);
+                }).Where(e => e.SubCategoryName.Contains(search) || search == null);
 
             IPagedList<ShowSubCategoriesVM> lista = c.ToPagedList(page ?? 1, 6);
             return View(lista);
         }
 
-        public IActionResult ShowProducts(int ID)       // ID podkategorije 
+        //[HttpGet]
+        //public async Task<IActionResult> ShowProducts(string search)
+        //{
+        //    ViewData["data"] = search;
+
+        //    var query = from x in _database.product select x;
+
+        //    if (!String.IsNullOrEmpty(search))
+        //    {
+        //        query = query.Where(x => x.ProductName.Contains(search));
+        //    }
+        //    return View(await query.AsNoTracking().ToListAsync());
+        //}
+
+        [HttpGet]
+
+        public async Task<IActionResult> ShowProducts(int ID,string? search)       // ID podkategorije 
         {
-            List<ShowProductsVM> products = _database.product.Where(s => s.SubCategoryID == ID).
+            ViewData["data"] = search;
+            ViewBag.ID = ID;
+            var product = _Iproduct.GetSubCategoryID(ID);
+            ViewBag.Name = product.SubCategoryName;
+
+            var products = _database.product.Where(s => s.SubCategoryID == ID).
                 Select(p => new ShowProductsVM
                 {
                     productID = p.ProductID,
@@ -205,9 +231,16 @@ namespace OnlineShop.Controllers
                     unitsInStock = p.UnitsInStock,
                     imageUrl = p.ImageUrl
                 }).ToList();
-            
-            return View(products);
+
+            var query = from x in products select x;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.productName.Contains(search));
+            }
+            return View(await query.ToListAsync());
         }
+
         public IActionResult ProductDetails(int ID)     // ID proizvoda
         {
             ProductDetailsVM model = _database.product.Where(s=>s.ProductID==ID).Select(a => new ProductDetailsVM
@@ -229,7 +262,7 @@ namespace OnlineShop.Controllers
 
         public IActionResult ShowStock()
         {
-            var products = Iproduct.GetAllProducts();
+            var products = _Iproduct.GetAllProducts();
 
             var model = new ShowProductsInStockVM
             {
@@ -246,7 +279,7 @@ namespace OnlineShop.Controllers
 
         public IActionResult DistributeProduct(int productID)
         {
-            var product = Iproduct.GetProductByID(productID);
+            var product = _Iproduct.GetProductByID(productID);
 
             var model = new DistributeProductVM
             {
@@ -277,7 +310,7 @@ namespace OnlineShop.Controllers
 
         public IActionResult SaveBranchProduct(DistributeProductVM model)
         {
-            var product = Iproduct.GetProductByID(model.productID);
+            var product = _Iproduct.GetProductByID(model.productID);
             var sum = 0;
             // za svaku prodavnicu rasporedjujemo proizvode
 
@@ -307,6 +340,5 @@ namespace OnlineShop.Controllers
             _database.SaveChanges();
             return Redirect("/Product/ShowStock");
         }
-
     }
 }

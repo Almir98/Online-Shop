@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "ListOfCustomers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<ListOfCustomersVM>
+
+
+<h1>Lista svih registrovanih korisnika</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Broj telefona</th>
+            <th>Emaik</th>
+            <th>Opcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Any())
+            {
+                foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Firstname</td>
+                        <td>@c.LastName</td>
+                        <td>@c.PhoneNumber</td>
+                        <td>@c.Email</td>
+                        <td><a href="/Administration/SetForAdmin?id=@c.Id" class="btn btn-danger">Postavi za admina</a></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>Nema registrovanih korisnika</tr>
+            }
+        }
+
+    </tbody>
+</table>
