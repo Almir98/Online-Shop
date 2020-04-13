@@ -1,0 +1,27 @@
+﻿@model List<ShowOrdersVM>
+@{
+    ViewData["Title"] = "ShowOrders";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ShowOrders</title>
+</head>
+<body>
+    <h3>Prikaz narudžbi</h3> <br />
+     <div id="table">
+                                 
+
+     </div>
+</body>
+</html>
+
+<script>
+    $.get("/Administration/GetOrders", function (res) {
+        $("#table").html(res);
+    });
+</script>

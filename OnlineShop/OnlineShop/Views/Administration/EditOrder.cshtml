@@ -1,0 +1,25 @@
+﻿@*neki vm*@
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+    <p>Uredi narudžbu: </p> <br />
+    <form method="post">
+
+
+        OVDJE CE BITI NEKI VM za uredjivanje, za sad je samo ajax uradjen
+        <button id="btn">Spremi</button>
+    </form>
+
+    <script>
+        $("#btn").click = function () {
+            $.ajax({
+                type: "POST",
+                url: "/Administration/SaveOrderChanges",
+                data: form.serialize(),
+                success: function (data) {
+                    $("#table").html(data);
+                }
+            });
+        };
+    </script>
