@@ -7,6 +7,6 @@ namespace OnlineShop.ViewModels
 {
     public class SohwProductForManageLIST
     {
-        public IEnumerable<ShowProductForManage> ListOfProducts { get; set; }
+        public List<ShowProductForManage> listProducts { get; set; }
     }
 }

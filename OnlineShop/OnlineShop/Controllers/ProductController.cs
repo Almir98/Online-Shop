@@ -25,8 +25,6 @@ namespace OnlineShop.Controllers
 
         private  INotification _notificationService;
 
-
-
         public ProductController(IProduct p, OnlineShopContext b, IHostingEnvironment hostingEnvironment, INotification notification)
         {
             _Iproduct = p;
@@ -40,10 +38,14 @@ namespace OnlineShop.Controllers
         {
             return View();
         }
-        public IActionResult Show()
+
+        
+        [HttpGet]
+        public async Task<IActionResult> Show(string search)
         {
-            var proizvodi = _Iproduct.GetAllProducts();
-            var productForView = proizvodi.Select(p => new ShowProductForManage
+            ViewData["data"] = search;
+
+            var products = _Iproduct.GetAllProducts().Select(p => new ShowProductForManage
             {
                 ProductID = p.ProductID,
                 ProductNumber = p.ProductNumber,
@@ -52,11 +54,17 @@ namespace OnlineShop.Controllers
                 ProductName = p.ProductName,
                 Description = p.Description,
                 UnitPrice = p.UnitPrice
-            });
-            var data = new SohwProductForManageLIST { ListOfProducts = productForView };
-            return View(data);
-        }
+            }).ToList();
 
+            var query = from x in products select x;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.ProductNumber.Contains(search) || x.ProductName.Contains(search));
+            }
+            return View(await query.ToListAsync());
+        }
+        
         public IActionResult Delete(int ID)
         {
             _Iproduct.RemoveProduct(ID);
@@ -214,14 +222,14 @@ namespace OnlineShop.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> ShowProducts(int ID,string? search)       // ID podkategorije 
+        public async Task<IActionResult> ShowProducts(int ID,string search)       // ID podkategorije 
         {
             ViewData["data"] = search;
             ViewBag.ID = ID;
             var product = _Iproduct.GetSubCategoryID(ID);
             ViewBag.Name = product.SubCategoryName;
 
-            var products = _database.product.Where(s => s.SubCategoryID == ID).
+            var products =  _Iproduct.GetAllProducts().Where(s => s.SubCategoryID == ID).
                 Select(p => new ShowProductsVM
                 {
                     productID = p.ProductID,
@@ -236,7 +244,7 @@ namespace OnlineShop.Controllers
 
             if (!String.IsNullOrEmpty(search))
             {
-                query = query.Where(x => x.productName.Contains(search));
+                query = query.Where(x => x.productName.Contains(search) || x.manufacturerName.Contains(search));
             }
             return View(await query.ToListAsync());
         }
@@ -331,7 +339,7 @@ namespace OnlineShop.Controllers
                    };
                    _database.Add(testing);
                 }
-                sum = sum + i.quntityPerBranch;        // sabiraju se kolicine po prodavnicama
+                sum+=i.quntityPerBranch;        // sabiraju se kolicine po prodavnicama
             }
             _database.SaveChanges();
             var stock = _database.stockproduct.Where(e => e.ProductID == model.productID).FirstOrDefault();

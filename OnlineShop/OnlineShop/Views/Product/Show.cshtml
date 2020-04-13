@@ -1,6 +1,6 @@
 ﻿@using OnlineShopPodaci.Model;
 
-@model OnlineShop.ViewModels.SohwProductForManageLIST
+@model List<ShowProductForManage>
 
 @{
     ViewData["Title"] = "Show";
@@ -8,11 +8,31 @@
 
 }
 
+<style>
+    #test {
+        width: 42%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+</style>
+
 <h1>Prikaz svih proizvoda</h1>
 
+<div id="test">
+
+    <form method="get" asp-action="Show" asp-route-search="search">
+
+        <p @ViewBag.ID />
+
+        <input type="search" placeholder="Unesite šifru ili naziv proizvoda" value="@ViewData["data"]" name="search" style="width:300px" />
+        <input type="submit" class="btn btn-success" value="Pretraži" />
+
+    </form>
+
+</div>
 <table class="table table-striped">
     <tr>
-        <th>Broj proizvoda</th>
+        <th>Šifra proizvoda</th>
         <th>Naziv podkategorije</th>
         <th>Naziv proizvodjaca</th>
         <th>Naziv proizvoda</th>
@@ -20,7 +40,7 @@
         <th>Cijena</th>
     </tr>
 
-    @foreach (var p in Model.ListOfProducts)
+    @foreach (var p in Model)
     {
         <tr>
             <td>@p.ProductNumber</td>

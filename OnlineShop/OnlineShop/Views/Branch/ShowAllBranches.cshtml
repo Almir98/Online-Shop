@@ -5,9 +5,29 @@
 }
 
 <h1>Prikaz svih poslovnica</h1>
+<br />
+@model List<ShowAllBranchesVM>
+<style>
+    #test {
+        width: 42%;
+        margin: auto;
+        margin-bottom: 15px;
+    }
+</style>
 
-@model ShowAllBranchesVM
+<div id="test">
 
+    <form method="get" asp-action="ShowAllBranches" asp-route-search="search">
+
+        <p @ViewBag.ID />
+
+        <input type="search" placeholder="Unesite grad ili naziv poslovnice" value="@ViewData["data"]" name="search" style="width:300px" />
+        <input type="submit" class="btn btn-success" value="Pretraži" />
+
+    </form>
+
+</div>
+<br />
 
 <table class="table table-striped">
     <thead>
@@ -18,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var i in Model._list)
+        @foreach (var i in Model)
         {
             <tr>
                 <td>@i.branchName</td>
@@ -34,4 +54,4 @@
 
 <br /><br />
 
-<a class="btn btn-primary" href="/Branch/AddBranch">Dodaj poslovnicu</a>
+@*<a class="btn btn-primary" href="/Branch/AddBranch">Dodaj poslovnicu</a>*@

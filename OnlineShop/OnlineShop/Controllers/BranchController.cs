@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.ViewModels;
 using OnlineShopPodaci;
 using OnlineShopPodaci.Model;
+using X.PagedList;
 
 namespace OnlineShop.Controllers
 {
@@ -19,24 +22,33 @@ namespace OnlineShop.Controllers
             _context = context;
         }
 
-        public IActionResult ShowAllBranches()
+        [HttpGet]
+        public async Task<IActionResult> ShowAllBranches(string search)
         {
+            ViewData["data"] = search;
             var branches = _branch.GetAllBranches();
 
-            var model = new ShowAllBranchesVM
+            var model = _branch.GetAllBranches().Select(e => new ShowAllBranchesVM
             {
-                _list = branches.Select(e => new ShowAllBranchesVM.rows
-                {
-                    branchID = e.BranchID,
-                    branchName = e.BranchName,
-                    city =_context.city.Where(x=>x.CityID==e.CityID).Select(a=>a.CityName).FirstOrDefault()            
-                }).ToList()
-            };
-            return View(model);
+                branchID = e.BranchID,
+                branchName = e.BranchName,
+                city = _context.city.Where(x => x.CityID == e.CityID).Select(a => a.CityName).FirstOrDefault()
+            }).ToList();
+
+            var query = from x in model select x;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.city.Contains(search) || x.branchName.Contains(search));
+            }
+            return View(await query.ToListAsync());
         }
 
-        public IActionResult ShowProductsInBranch(int branchID)
+        [HttpGet]
+        public async Task<IActionResult> ShowProductsInBranch(int branchID,string search)
         {
+            ViewBag.ID =branchID;
+            
             var branch = _branch.GetBranchByID(branchID);
             var products = _context.branchproduct.Where(e=>e.BranchID== branchID).Select(e=>e.Product).ToList();
 
@@ -57,7 +69,16 @@ namespace OnlineShop.Controllers
                     imageUrl=_context.product.Where(a=>a.ProductID==e.ProductID).Select(a=>a.ImageUrl).FirstOrDefault()
                 }).ToList()
             };
+
             return View(model);
+
+            var query = from x in products select x;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.ProductName.Contains(search));
+            }
+            return View(await query.ToListAsync());
         }
 
         public IActionResult ProductDetail(int productID,int branchID)
