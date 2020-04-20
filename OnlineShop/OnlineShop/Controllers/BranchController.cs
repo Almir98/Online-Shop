@@ -72,13 +72,6 @@ namespace OnlineShop.Controllers
 
             return View(model);
 
-            var query = from x in products select x;
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                query = query.Where(x => x.ProductName.Contains(search));
-            }
-            return View(await query.ToListAsync());
         }
 
         public IActionResult ProductDetail(int productID,int branchID)

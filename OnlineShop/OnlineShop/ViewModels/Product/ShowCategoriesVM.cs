@@ -9,6 +9,7 @@ namespace OnlineShop.ViewModels
     {
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }
+        public string imageurl { get; set; }
 
     }
 }

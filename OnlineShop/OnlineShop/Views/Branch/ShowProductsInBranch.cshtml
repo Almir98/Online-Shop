@@ -1,6 +1,8 @@
 ﻿
 @{
     ViewData["Title"] = "ShowProductsInBranch";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 @model ShowProductsInBranchVM
@@ -46,13 +48,9 @@
     .button {
         height: 60px;
     }
-    #test {
-        width: 42%;
-        margin: auto;
-        margin-bottom: 15px;
-    }
 </style>
 
+<br />
 <div id="header">
 
     <input asp-for="branchID" hidden />
@@ -64,22 +62,8 @@
     <h6>Radno vrijeme :  @Model.openTime - @Model.closeTime   </h6>
 
 </div>
-
 <br />
-<div id="test">
 
-    <form method="get" asp-action="ShowProductsInBranch" asp-route-branchID="@ViewBag.ID" asp-route-search="search">
-
-        <p @ViewBag.ID />
-
-        <input type="search" placeholder="Unesite naziv proizvoda" value="@ViewData["data"]" name="search" style="width:300px" />
-        <input type="submit" class="btn btn-success" value="Pretraži" />
-
-    </form>
-
-</div>
-
-<br />
 <div id="tablediv">
 
     @foreach (var i in Model._list)

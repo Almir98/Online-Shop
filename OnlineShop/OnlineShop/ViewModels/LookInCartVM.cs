@@ -13,7 +13,7 @@ namespace OnlineShop.ViewModels
         public string SubCategoryName { get; set; }
         public double UnitPrice { get; set; }
         public int Quantity { get; set; }
-        
+        public int ActualQuantity { get; set; }
 
     }
 }

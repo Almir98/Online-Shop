@@ -1,25 +1,93 @@
-﻿@*neki vm*@
+﻿@model EditOrderVM
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@{
+    var a = TempData["msg"] as string;
+}
+ <h3 style="color:red">@a</h3>
+<p>Detalji narudžbe</p>
+<br />
+<form id="forma">
+    Narudzba rb <input readonly asp-for="OrderID" value="@Model.OrderID" /> <br />
+    Datum narudžbe<input readonly asp-for="OrderDate" value="@Model.OrderDate" /><br />
+    Korisnik<input readonly value="@Model.UserInfo" /> <br />
+    Status narudžbe<input value="@Model.OrderStatus" /> <br />
+    @if (Model.OrderStatus != "Shipped" && Model.OrderStatus != "Cancelled")
+    {
+        <table border="1">
 
-    <p>Uredi narudžbu: </p> <br />
-    <form method="post">
+            @for (var i = 0; i < Model.items.Count(); i++)
+            {
+                <tr style="background-color: #696969; color: #fff">
 
+                    <th>ID proizvoda</th>
+                    <th>Naziv proizvoda</th>
+                    <th>Zahtjevana količina</th>
+                </tr>
+                <tr>
+                    @*@Html.LabelFor(model=>model.items[i].ProductID)*@
+                    <td>@Html.TextBoxFor(model => model.items[i].ProductID, new { @readonly = "readonly" })</td>
+                    @*<input readonly asp-for="@x.ProductID" value="@x.ProductID" />*@
+                    <td>@Html.TextBoxFor(model => model.items[i].ProductName, new { @readonly = "readonly" })</td>
+                    <td>@Html.TextBoxFor(model => model.items[i].RequiredQuantity, new { @readonly = "readonly" })</td>
+                </tr>
 
-        OVDJE CE BITI NEKI VM za uredjivanje, za sad je samo ajax uradjen
-        <button id="btn">Spremi</button>
-    </form>
+                <tr style="background-color: #969696; color: #fff"><th>Rb poslovnice</th><th>Poslovnica</th> <th>Stanje proizvoda</th> <th>Oduzmi od stanja</th></tr>
+                if (Model.items[i].branches.Any())
+                {
+                    for (int j = 0; j < Model.items[i].branches.Count(); j++)
 
-    <script>
-        $("#btn").click = function () {
-            $.ajax({
-                type: "POST",
-                url: "/Administration/SaveOrderChanges",
-                data: form.serialize(),
-                success: function (data) {
-                    $("#table").html(data);
+                    {
+                        <tr>
+                            <td><input readonly asp-for="@Model.items[i].branches[j].BranchID" value="@Model.items[i].branches[j].BranchID" /> </td>
+                            <td>@Model.items[i].branches[j].BranchName</td>
+                            <td>@Html.TextBoxFor(model => model.items[i].branches[j].AvailableQuantity, new { @readonly = "readonly" })</td> @if (Model.items[i].branches[j].AvailableQuantity > Model.items[i].RequiredQuantity)
+                            {
+                                <td><input type="number" min="0" max="@Model.items[i].RequiredQuantity" asp-for="@Model.items[i].branches[j].Input" /></td>
+                            }
+                            else
+                            {
+                                <td><input type="number" min="0" max="@Model.items[i].branches[j].AvailableQuantity" asp-for="@Model.items[i].branches[j].Input" /></td>
+                            }
+                        </tr>
+                    }
                 }
-            });
-        };
-    </script>
+                else
+                {
+                    <tr><td><a href="javascript:void(0)" onclick="location.href='/Product/DistributeProduct?productID='+@Model.items[i].ProductID">Raspodjeli !</a></td></tr>
+                }
+
+            }
+        </table>
+    }
+    @if (Model.items.Any(s => s.branches.Count == 0) || Model.OrderStatus == "Shipped")
+    {
+        {<button disabled type="submit" onclick="SaveChanges()" id="btn">Odobri narudžbu za slanje</button>}
+    }
+    else
+    {<button type="button" id="btn">Odobri narudžbu za slanje</button>} <br />
+    <button type="button" onclick="CancelOrder()">Poništi narudžbu</button>
+    <button type="button" onclick="location.href='/Administration/ShowOrders'">Nazad</button>
+</form>
+    
+
+<script>
+
+    $("#btn").click(function () {
+        var form = $("#forma");
+        $.ajax({
+            type: "POST",
+            url: "/Administration/SaveOrderChanges",
+            data: form.serialize(),
+            success: function (res) {
+                $("#table").html(res);
+            }
+        });
+    });
+
+</script>
+
+
+
+

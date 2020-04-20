@@ -14,6 +14,10 @@ namespace OnlineShopPodaci.Model
         public User User { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime ShipDate { get; set; }
-        public decimal TotalPrice { get; set; } 
+        public double TotalPrice { get; set; }
+        [ForeignKey("OrderStatus")]
+        public int OrderStatusID { get; set; }
+        public OrderStatus OrderStatus { get; set; }
+
     }
 }

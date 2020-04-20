@@ -1,6 +1,8 @@
 ﻿@model List<ShowOrdersVM>
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
 *@
     <table border="1">
         @foreach (var x in Model)
@@ -11,7 +13,7 @@
                 <th>Datum slanja</th>
                 <th>Korisnik</th>
                 <th>Ukupna cijena</th>
-                <th>Narudžba isporučena</th>
+                <th>Stanje narudžbe</th>
                 <th>Akcija</th>
             </tr>
             <tr>
@@ -19,27 +21,14 @@
                 <td>@x.OrderID</td>
                 <td>@x.OrderDate</td>
                 <td>@x.ShipTime</td>
-                <td><a href="#">@x.UserInfo</a></td>
+                <td><a href="javascript:void(0)" onclick="location.href='/Administration/UserDetails?id=@x.UserID'">@x.UserInfo</a></td>  
                 <td>@x.TotalPrice</td>
-                <td>@(x.IsShipped ? "Da" : "Ne")</td>  @*//bit ce clickable, kad klikne na checkbox da postane true ako je na false, ako je na true tj isporuceno disableovana je opcija*@
+                <td>@x.Status</td> 
                 <td>
-                    @if (x.IsShipped)
-                    {<button disabled id="edit">Uredi</button>}
-                    else
-                    { <button id="edit" onclick="Edit(@x.OrderID)">Uredi</button>}
+                    <button id="edit" onclick="Edit(@x.OrderID)">Detalji</button>
                 </td>
             </tr>
-            <tr style="background-color: #bfbfbf; color: #fff">
-                <th>Naziv proizvoda</th>
-                <th>Količina</th>
-            </tr>
-            @foreach (var y in x.Items)
-            {
-                <tr>
-                    <td>@y.ProductName</td>
-                    <td>@y.Quantity</td>
-                </tr>
-            }
+            
         }
 
     </table>

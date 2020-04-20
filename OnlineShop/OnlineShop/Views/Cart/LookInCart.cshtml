@@ -1,14 +1,12 @@
 ﻿@using OnlineShopPodaci.Model;
 @{
 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
 }
 @model List<OnlineShop.ViewModels.LookInCartVM>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>LookInCart</title>
-</head>
+
 <body>
     <h2 style="color:maroon">Košarica</h2> <br />
    
@@ -16,11 +14,10 @@
 
     </div> 
 </body>
-</html>
 
 <script>
 
-        $.get("/Cart/GetCartItems?userid=6", function (res) {
+        $.get("/Cart/GetCartItems", function (res) {
             $("#tabela").html(res);
         });
 

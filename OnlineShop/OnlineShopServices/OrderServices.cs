@@ -20,5 +20,10 @@ namespace OnlineShopServices
             List<Cart> listacart = _database.cart.Where(u => u.UserID == userid).ToList();
             return listacart;
         }
+
+        public double GetTotalPrice(int userid)
+        {
+            return _database.cart.Where(s=>s.UserID==userid).Sum(a=>a.TotalPrice);
+        }
     }
 }

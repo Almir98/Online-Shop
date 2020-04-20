@@ -1,0 +1,98 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url(../images/bckg.jpg);
+    background-size: cover;
+    background-position: center;
+    font-family: sans-serif;
+}
+
+.menu-bar {
+    background: rgb(0,0,0);
+    text-align: center;
+}
+
+    .menu-bar ul {
+        display: inline-flex;
+        list-style: none;
+        color: #fff;
+    }
+
+        .menu-bar ul li {
+            width: 150px;
+            margin: 10px;
+            padding: 10px;
+            margin-left: 13px;
+            z-index: 1;
+        }
+
+            .menu-bar ul li a {
+                text-decoration: none;
+                color: #fff;
+            }
+
+                .menu-bar ul li a:hover {
+                    color: #b2ff00;
+                }
+
+            .menu-bar ul li button:hover {
+                color: #b2ff00;
+            }
+
+            .aktivna, .menu-bar ul li:hover {
+                background: rgb(108, 0, 0);
+                border-radius: 3px;
+            }
+
+                .menu-bar ul li:hover:last-child {
+                    background: transparent;
+                }
+            .menu-bar ul li:last-child:hover .sub-menu-proizvod  {
+                margin-top: 10px;
+            }
+
+                    .menu-bar .fa {
+                        margin-right: 10px;
+                    }
+
+.sub-menu-proizvod {
+    display: none;
+}
+
+.menu-bar ul li:hover .sub-menu-proizvod {
+    display: block;
+    position: absolute;
+    background: rgb(0,0,0);
+    margin-top: 25px;
+    margin-left: -15px;
+}
+
+    .menu-bar ul li:hover .sub-menu-proizvod ul {
+        display: block;
+    }
+
+        .menu-bar ul li:hover .sub-menu-proizvod ul li {
+            width: 150px;
+            padding: 10px;
+            border-bottom: 1px dotted #fff;
+            background: transparent;
+            border-radius: 0;
+            text-align: left;
+            margin-left:25px;
+        }
+
+            .menu-bar ul li:hover .sub-menu-proizvod ul li:last-child {
+                border-bottom: none;
+            }
+
+            .menu-bar ul li:hover .sub-menu-proizvod ul li a:hover {
+                color: #b2ff00;
+            }
+
+.btn {
+    margin: 5px;
+}

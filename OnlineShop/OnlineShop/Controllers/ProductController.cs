@@ -36,7 +36,14 @@ namespace OnlineShop.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            List<ShowCategoriesVM> data = _database.category.Select(c => new ShowCategoriesVM
+            {
+                CategoryID = c.CategoryID,
+                CategoryName = c.CategoryName,
+                imageurl = c.ImageUrl
+            }).ToList();
+
+            return View(data);
         }
 
         
@@ -147,7 +154,7 @@ namespace OnlineShop.Controllers
                 {
                     var st_pr = new StockProduct            // medjutabela
                     {
-                        StockID = 5,                                                                         // jer je samo 1 skladiste
+                        StockID = 1,                                                                         // jer je samo 1 skladiste
                         ProductID = neki.ProductID,
                         Quantity = neki.UnitsInStock
                     };
@@ -161,27 +168,106 @@ namespace OnlineShop.Controllers
 
         public IActionResult AddManufacturer(int ProductID)
         {
-            ViewData["idP"] =ProductID;
-            return View("AddManufacturer");
+            var product = _Iproduct.GetProductByID(ProductID);
+            var model = new AddManufacturerVM
+            {
+                productID=ProductID
+            };
+            return View(model);
         }
 
-        public IActionResult SaveManufacturer(string manufacturerName, string logoURL,int ProductID)
+        public IActionResult SaveManufacturer(AddManufacturerVM model)
         {
+            string uniquefileName = null;
+            if (model.Image != null)
+            {
+                string uploadsFolder = Path.Combine(hosting.WebRootPath, "images");
+                uniquefileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniquefileName);
+                model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
+            }
+
             Manufacturer manufacturer = new Manufacturer
             {
-                ManufacturerName = manufacturerName,
-                LogoUrl = logoURL
+                ManufacturerName = model.manufacturerName,
+                LogoUrl = uniquefileName
             };
-
-            _database.manufacturer.Add(manufacturer);
-            _database.SaveChanges();
-            return Redirect($"/Product/AddProduct?={ProductID}");
-
+            _Iproduct.AddManufacturer(manufacturer);
+            return Redirect($"/Product/AddProduct?={model.productID}");
         }
+
+        public IActionResult AddCategory()
+        {
+            var model = new AddCategoryVM
+            {
+            };
+            return View(model);
+        }
+
+        public IActionResult SaveCategory(AddCategoryVM model)
+        {
+            string uniquefileName = null;
+            if (model.Image != null)
+            {
+                string uploadsFolder = Path.Combine(hosting.WebRootPath, "images");
+                uniquefileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniquefileName);
+                model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
+            }
+            Category category = new Category
+            {
+                CategoryName=model.categoryName,
+                ImageUrl=uniquefileName
+            };
+            _Iproduct.AddCategory(category);
+            return Redirect("/Administration/Index");
+        }
+
+        public IActionResult AddSubCategory()
+        {
+
+            var model = new AddSubCategoryVM
+            {
+                _lista=_database.category.Select(e=>new SelectListItem
+                {
+                    Value=e.CategoryID.ToString(),
+                    Text=e.CategoryName
+                }).ToList()
+            };
+            return View(model);
+        }
+        public IActionResult SaveSubCategory(AddSubCategoryVM model)
+        {
+            string uniquefileName = null;
+            if (model.Image != null)
+            {
+                string uploadsFolder = Path.Combine(hosting.WebRootPath, "images");
+                uniquefileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniquefileName);
+                model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
+            }
+
+            SubCategory subcategory = new SubCategory
+            {
+                SubCategoryName=model.subcategoryName,
+                CategoryID=model.categoryID,
+                ImageUrl=uniquefileName
+            };
+            _Iproduct.AddSubCategory(subcategory);
+            return Redirect("/Administration/Index");
+        }
+
+
+
 
         public IActionResult Show2()       
         {
-           List<ShowCategoriesVM >data = _database.category.Select(c => new ShowCategoriesVM { CategoryID = c.CategoryID, CategoryName = c.CategoryName }).ToList();
+           List<ShowCategoriesVM >data = _database.category.Select(c => new ShowCategoriesVM
+           {
+               CategoryID = c.CategoryID,
+               CategoryName = c.CategoryName,
+               imageurl=c.ImageUrl
+           }).ToList();
             
             return View(data);
         }
@@ -206,22 +292,8 @@ namespace OnlineShop.Controllers
             return View(lista);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> ShowProducts(string search)
-        //{
-        //    ViewData["data"] = search;
-
-        //    var query = from x in _database.product select x;
-
-        //    if (!String.IsNullOrEmpty(search))
-        //    {
-        //        query = query.Where(x => x.ProductName.Contains(search));
-        //    }
-        //    return View(await query.AsNoTracking().ToListAsync());
-        //}
 
         [HttpGet]
-
         public async Task<IActionResult> ShowProducts(int ID,string search)       // ID podkategorije 
         {
             ViewData["data"] = search;
@@ -267,22 +339,29 @@ namespace OnlineShop.Controllers
             return View(model);
         }
 
-
-        public IActionResult ShowStock()
+        [HttpGet]
+        public async Task<IActionResult> ShowStock(string search)
         {
+            ViewData["data"] = search;
+
             var products = _Iproduct.GetAllProducts();
 
-            var model = new ShowProductsInStockVM
+            var model = products.Select(e => new ShowProductsInStockVM
             {
-                _lista = products.Select(e => new ShowProductsInStockVM.rows
-                {
-                    ProductID=e.ProductID,
-                    ProductName=e.ProductName,
-                    Price=e.UnitPrice,
-                    Quantity=_database.stockproduct.Where(a=>a.ProductID==e.ProductID).Select(a=>a.Quantity).FirstOrDefault()
-                }).ToList()
-            };
-            return View(model);
+                ProductID = e.ProductID,
+                ProductName = e.ProductName,
+                Price = e.UnitPrice,
+                Quantity = _database.stockproduct.Where(a => a.ProductID == e.ProductID).Select(a => a.Quantity).FirstOrDefault()
+
+            }).ToList();
+
+            var query = from x in model select x;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => x.ProductName.Contains(search));
+            }
+            return View(await query.ToListAsync());
         }
 
         public IActionResult DistributeProduct(int productID)
@@ -320,11 +399,10 @@ namespace OnlineShop.Controllers
         {
             var product = _Iproduct.GetProductByID(model.productID);
             var sum = 0;
-            // za svaku prodavnicu rasporedjujemo proizvode
 
             foreach (var i in model._list)
             {
-                var bp = _database.branchproduct.Where(e => e.BranchID == i.branchID).FirstOrDefault();
+                var bp = _database.branchproduct.Where(e => e.BranchID == i.branchID && e.ProductID==product.ProductID).FirstOrDefault();
                 if (bp!=null && model.productID == bp.ProductID)
                 {
                     bp.UnitsInBranch += i.quntityPerBranch;

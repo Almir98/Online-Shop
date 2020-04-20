@@ -1,29 +1,38 @@
 ﻿
 @{
     ViewData["Title"] = "AddManufactures";
-    var idP = ViewData["idP"];
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
 }
 
-<h1>Dodaj novog proizvodjaca</h1>
+<br />
+<h1>Dodaj novog proizvođača</h1>
+<br />
 
-<form action="/Product/SaveManufacturer">
+@using OnlineShop.ViewModels;
 
-    <p>Naziv proizvodjaca</p>
-    <input type="text" name="manufacturerName" />
+@model AddManufacturerVM
+
+
+<form enctype="multipart/form-data" asp-action="SaveManufacturer" method="post">
+
+    <input type="hidden" asp-for="productID" />
+
+    <p>Naziv proizvođača</p>
+    <div class="custom-file">
+        <input class="form-control" type="text" asp-for="manufacturerName" />
+        <br />
+    </div>
+
+    <p>Logo URL:</p>
+    <div class="custom-file">
+        <input asp-for="Image" class="form-control custom-file-input" value="@Model.Image" /><br />
+
+        <label class="custom-file-label">Izaberi sliku</label>
+    </div>
     <br />
 
-    <p>Logo URL</p>
-    <input type="url" name="logoURL" />
-    <br /><br />
-
-    <input style="display:none" name="ProductID" value="@idP"/>
-
-    <input type="submit" value="POTVRDI" />
+    <input class="btn btn-primary" type="submit" value="Sačuvaj" />
 </form>
 
-<br />
-<form action="/Product/AddProduct?ProductID=@idP">
-
-    <input type="submit" value="Nazad" />
-</form>
 

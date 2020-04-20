@@ -1,43 +1,50 @@
-﻿
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+
 @{
-    ViewData["Title"] = "ListOfCustomers";
+    ViewData["Title"] = "Lista registrovanih korisnika";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-@model List<ListOfCustomersVM>
+@model IPagedList<ListOfCustomersVM>
 
 
-<h1>Lista svih registrovanih korisnika</h1>
+<h1 class="text-center">Lista svih registrovanih korisnika</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Ime</th>
-            <th>Prezime</th>
-            <th>Broj telefona</th>
-            <th>Emaik</th>
-            <th>Opcije</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            if (Model.Any())
+
+<div class="row">
+
+    @{
+        if (Model.Any())
+        {
+            foreach (var c in Model)
             {
-                foreach (var c in Model)
-                {
-                    <tr>
-                        <td>@c.Firstname</td>
-                        <td>@c.LastName</td>
-                        <td>@c.PhoneNumber</td>
-                        <td>@c.Email</td>
-                        <td><a href="/Administration/SetForAdmin?id=@c.Id" class="btn btn-danger">Postavi za admina</a></td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>Nema registrovanih korisnika</tr>
+                <div class="col-md-4 col-sm-4">
+
+
+                    <div class="card m-3">
+                        <div class="card-header text-center text-danger">@c.Firstname @c.LastName</div>
+
+                        <div class="card-body text-center">
+                            <img class="card-img-top" src="~/images/USER.png" style="width:100px" />
+
+
+                        </div>
+
+                        <div class="card-footer text-center">
+                            <a href="/Administration/UserDetails?id=@c.Id" class="btn btn-primary">Detalji</a>
+                            <a href="/Administration/SetForAdmin?id=@c.Id" class="btn btn-danger">Dodijeli admina</a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
             }
         }
 
-    </tbody>
-</table>
+    }
+</div>
+
+@Html.PagedListPager(Model, page => Url.Action("ListOfCustomers", new { page}))

@@ -8,6 +8,7 @@ namespace OnlineShopPodaci
     public interface IOrder
     {
         List<Cart> GetAllCartItemsByUser(int userid);
+        double GetTotalPrice(int userid);
 
     }
 }

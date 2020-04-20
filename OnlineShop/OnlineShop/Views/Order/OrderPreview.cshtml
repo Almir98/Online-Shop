@@ -1,6 +1,6 @@
 ﻿@model OnlineShop.ViewModels.OrderPreviewVM
 @{
-//Layout = null;
+//Layout = null;  FILLED INFO BOOLEAN, OMOGUCAVA NASTAVAK ORDERA, ako je false onda je disabled zakljuci narudzbu plus moras ispunit podatke da bi nastavio sa narudzbom, user controller il sta vec
 }
 
 <!DOCTYPE html>
@@ -49,7 +49,12 @@
     Adresa <br />
     <input readonly value="@Model.phonenumber" /> <br />
     Broj telefona <br />
-    <button id="finish">Zaključi narudžbu</button> <button id="continue" style="margin:5px">Nastavi sa kupovinom</button> <br />
+    @if (Model.FilledInfo == false)
+    {<button disabled id="finish">Zaključi narudžbu</button> <text>Potrebne informacije za slanje pošiljke nisu evidentirane ! Uredite profil <a href="#">ovdje</a> NEK OVO NEKO IMPLEMENTIRA HE HE /User/ChangeInfo <br /></text>}
+    else
+    {<button id="finish">Zaključi narudžbu</button> <br />} 
+    
+    <button id="continue">Nastavi sa kupovinom</button> <br />
 
 </body>
 </html>
@@ -58,9 +63,10 @@
         document.location = "/Product/Show2";
     });
 
-    //$("#finish").click(function () {
-    //    document.location = "/Order/SaveOrder";
-    //});
+    $("#finish").click(function () {
+        document.location = "/Order/SaveOrder";
+    });
 
 
 </script>
+

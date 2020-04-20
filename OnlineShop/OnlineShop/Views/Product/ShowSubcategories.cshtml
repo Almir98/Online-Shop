@@ -17,12 +17,13 @@
 
 <style>
     #maindiv {
-        width: 25%;
+        width: 23%;
         float: left;
         margin: 10px;
         padding: 0px;
         border-radius: 5px;
         height: 230px;
+        margin-left:35px;
     }
 
         #maindiv:hover {
@@ -38,7 +39,47 @@
     .pagination-container {
         margin-top: 550px;
     }
+
+    #content{
+        width:75%;
+        margin:auto;
+        float:left;
+    }
+
+    #lijevinav{
+        width:20%;
+        background-color:lightgray;
+        float:left;
+        height:615px;
+    }
+
+    #imagediv {
+        width: auto;
+        height: auto;
+        display: flex;
+        height: 170px;
+    }
+        
+    #slika {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto\9;
+        object-fit: cover;
+        margin:auto;
+
+    }
+
+
 </style>
+
+<div id="lijevinav">
+    za neku reklamu sliku 
+</div>
+
+
+<div id="content">
+
 
 
 <h5>@ViewBag.Name</h5>
@@ -49,10 +90,14 @@
 
         <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card h-100">
-                <img class="card-img-top" src="http://placehold.it/700x400" alt="">
+                <div id="imagediv">
+
+                    <img id="slika" src="~/images/@x.imageurl" alt="">
+                </div>
+
                 <div class="card-body">
                     <h4 style="color:blue" class="card-title">
-                        <p>@x.SubCategoryName</p>
+                        @x.SubCategoryName
                     </h4>
                 </div>
             </div>
@@ -60,10 +105,9 @@
     </a>
 }
 
-<div id='Paging' style="text-align:center">
-    @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
-        of @Model.PageCount*@
+<div id='Paging' style="text-align: center">
 
     @Html.PagedListPager(Model, page => Url.Action("ShowSubCategories", new { page, Model[0].ID }))
 </div>
 
+</div>

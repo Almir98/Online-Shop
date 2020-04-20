@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> signInManager;
 
+
 <!DOCTYPE html>
 
 <html>
@@ -9,10 +10,14 @@
     <title>@ViewBag.Title</title>
 
 
-
+    <link rel="stylesheet" href="~/css/Admin_Layout_Edit.css" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-    <link rel="stylesheet" href="~/css/administratorEdit.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 
 
@@ -24,12 +29,16 @@
                 <li class="aktivna"><a href="/Administration/Index"><i class="fa fa-home"></i>Admin home page</a></li>
                 <li><a href="#"><i class="fa fa-user-secret" aria-hidden="true"></i>Administratori</a></li>
                 <li><a href="/Administration/ListOfCustomers"><i class="fa fa-users"></i>Registrovani korisnici</a></li>
+                <li><a href="/Administration/ShowOrders"><i class="fa fa-list-alt" aria-hidden="true"></i>Prikaz narudžbi</a></li>
                 <li>
                     <a href="#"><i class="fa fa-television" aria-hidden="true"></i>Proizvodi</a>
                     <div class="sub-menu-proizvod">
                         <ul>
                             <li><a href="/Product/Show"><i class="fa fa-list" aria-hidden="true"></i>Lista proizvoda</a></li>
                             <li><a href="/Product/AddProduct"><i class="fa fa-plus-square" aria-hidden="true"></i>Dodaj novi proizvod</a></li>
+                            <li><a href="/Product/AddCategory"><i class="fa fa-plus-square" aria-hidden="true"></i>Dodaj kategoriju</a></li>
+                            <li><a href="/Product/AddSubCategory"><i class="fa fa-plus-square" aria-hidden="true"></i>Dodaj podkategoriju</a></li>
+
                         </ul>
                     </div>
 
@@ -47,13 +56,21 @@
                 <li><a href="/Product/ShowStock"><i class="fa fa-archive" aria-hidden="true"></i>Skladište</a></li>
                 @if (signInManager.IsSignedIn(User))
                 {
-                    <li class="odjavaL">
-                        <form method="post" asp-action="Logout" asp-controller="Account">
-                            <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
-                                Odjavi se, @User.Identity.Name
-                            </button>
+                    <li>
+                        <a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i>@User.Identity.Name</a>
+                        <div class="sub-menu-proizvod">
+                            <ul>
+                                <li><a href="/Administration/EditAdminProfile"><i class="fa fa-cog" aria-hidden="true"></i>Uredi profil</a></li>
+                                <li>
+                                    <form method="post" asp-action="Logout" asp-controller="Account">
+                                        <button type="submit" class="nav-link btn btn-link" style="margin:0">
+                                            <i class="fa fa-sign-out" aria-hidden="true" style="margin-right:2px"></i> Odjavi se
+                                        </button>
 
-                        </form>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 }
 
@@ -64,6 +81,9 @@
                 @RenderBody()
             </main>
         </div>
+
+
+
     </div>
 </body>
 </html>

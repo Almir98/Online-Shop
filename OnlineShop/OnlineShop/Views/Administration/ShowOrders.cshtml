@@ -1,11 +1,10 @@
 ﻿@model List<ShowOrdersVM>
 @{
     ViewData["Title"] = "ShowOrders";
-    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -13,15 +12,17 @@
 </head>
 <body>
     <h3>Prikaz narudžbi</h3> <br />
-     <div id="table">
-                                 
+    <div id="table">
 
-     </div>
+
+    </div>
 </body>
 </html>
 
 <script>
-    $.get("/Administration/GetOrders", function (res) {
-        $("#table").html(res);
+    $(document).ready(function () {
+        $.get("/Administration/GetOrders", function (res) {
+            $("#table").html(res);
+        });
     });
 </script>

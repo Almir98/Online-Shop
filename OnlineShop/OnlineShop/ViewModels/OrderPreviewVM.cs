@@ -14,6 +14,7 @@ namespace OnlineShop.ViewModels
         public string lname { get; set; }
         public string adress { get; set; }
         public string phonenumber { get; set; }
+        public bool FilledInfo { get; set; }  //if false, order could not be made
 
     }
 }

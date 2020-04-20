@@ -8,10 +8,10 @@ using System.Text;
 
 namespace OnlineShopPodaci
 {
-    public class OnlineShopContext:IdentityDbContext<User,Role,int>
+    public class OnlineShopContext : IdentityDbContext<User, Role, int>
     {
-        public OnlineShopContext(DbContextOptions<OnlineShopContext> opcije):base(opcije){
-        
+        public OnlineShopContext(DbContextOptions<OnlineShopContext> opcije) : base(opcije) {
+
         }
         public OnlineShopContext()
         {
@@ -28,6 +28,7 @@ namespace OnlineShopPodaci
         public DbSet<Manufacturer> manufacturer { get; set; }
         public DbSet<OrderDetails> orderdetails { get; set; }
         public DbSet<Order> order { get; set; }
+        public DbSet<OrderStatus>orderstatus{get;set;}
         public DbSet<Product> product { get; set; }
         public DbSet<SubCategory> subcategory { get; set; }
         public DbSet<Stock> stock { get; set; }

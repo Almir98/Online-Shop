@@ -15,5 +15,11 @@ namespace OnlineShopPodaci
         Category GetCategoryID(int id);
 
         void RemoveProduct(int id);
+
+        void AddCategory(Category category);
+
+        void AddSubCategory(SubCategory category);
+
+        void AddManufacturer(Manufacturer manufacturer);
     }
 }

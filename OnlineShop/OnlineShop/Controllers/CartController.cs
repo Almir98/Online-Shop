@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.ViewModels;
 using OnlineShopPodaci;
+using OnlineShopPodaci.Model;
 
 namespace OnlineShop.Controllers
 {
     public class CartController : Controller
-    {
+    {   
         private ICart _cart;
         private OnlineShopContext _database;
 
@@ -19,18 +22,20 @@ namespace OnlineShop.Controllers
             _database = db;
         }
 
-        public IActionResult AddToCart(int productid, int userid = 6, int q = 1)
+        public IActionResult AddToCart(int productid,int q = 1)
         {
-            _cart.AddToCart(productid, userid, q);
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _cart.AddToCart(productid,userid,q);
             return View("ItemAdded");
         }
 
-        public IActionResult LookInCart(int userid = 6)
+        public IActionResult LookInCart()
         {
             return View();
         }
-        public IActionResult GetCartItems(int userid = 6)
+        public IActionResult GetCartItems()  
         {
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var listacart = _cart.GetAllCartItemsByUser(userid);
             List<LookInCartVM> listavm = listacart
             .Select(s => new LookInCartVM
@@ -40,29 +45,31 @@ namespace OnlineShop.Controllers
                 ProductName = _database.product.Find(s.ProductID).ProductName,
                 SubCategoryName = _database.subcategory.Find(_database.product.Find(s.ProductID).SubCategoryID).SubCategoryName,
                 UnitPrice = _database.product.Find(s.ProductID).UnitPrice,
-                Quantity = s.Quantity
+                Quantity = s.Quantity,
+                ActualQuantity= _database.product.Find(s.ProductID).UnitsInStock
             }
             ).ToList();
             return PartialView(listavm);
         }
       
-
-
-        public IActionResult RemoveFromCart(int productid, int userid)
+        public IActionResult RemoveFromCart(int productid)
         {
-            _cart.RemoveCartItem(productid, userid);
-            return Redirect("/Cart/GetCartItems?userid="+userid);
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _cart.RemoveCartItem(productid,userid);
+            return Redirect("/Cart/GetCartItems");
         }
-        public IActionResult DeleteCart(int userid)
+        public IActionResult DeleteCart()
         {
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             _cart.RemoveAllCartItems(userid);
-            return Redirect("GetCartItems?userid=" + userid);
+            return Redirect("GetCartItems");
         }
         
         [HttpGet]
-        public IActionResult SetQuantity(int productid,int userid,int q)
+        public IActionResult SetQuantity(int productid,int q)
         {
-            _cart.ChangeQuantity(productid, userid, q);
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _cart.ChangeQuantity(productid,userid, q);
             var listacart = _cart.GetAllCartItemsByUser(userid);
             List<LookInCartVM> listavm = listacart
             .Select(s => new LookInCartVM
@@ -72,7 +79,8 @@ namespace OnlineShop.Controllers
                 ProductName = _database.product.Find(s.ProductID).ProductName,
                 SubCategoryName = _database.subcategory.Find(_database.product.Find(s.ProductID).SubCategoryID).SubCategoryName,
                 UnitPrice = _database.product.Find(s.ProductID).UnitPrice,
-                Quantity = s.Quantity
+                Quantity = s.Quantity,
+                ActualQuantity=_database.product.Find(s.ProductID).UnitsInStock
             }
             ).ToList();
             return PartialView("GetCartItems",listavm);

@@ -314,16 +314,21 @@ namespace OnlineShopPodaci.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("OrderStatusID")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ShipDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("OrderID");
+
+                    b.HasIndex("OrderStatusID");
 
                     b.HasIndex("UserID");
 
@@ -346,6 +351,21 @@ namespace OnlineShopPodaci.Migrations
                     b.HasIndex("OrderID");
 
                     b.ToTable("orderdetails");
+                });
+
+            modelBuilder.Entity("OnlineShopPodaci.Model.OrderStatus", b =>
+                {
+                    b.Property<int>("OrderStatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderStatusId");
+
+                    b.ToTable("orderstatus");
                 });
 
             modelBuilder.Entity("OnlineShopPodaci.Model.Product", b =>
@@ -679,6 +699,12 @@ namespace OnlineShopPodaci.Migrations
 
             modelBuilder.Entity("OnlineShopPodaci.Model.Order", b =>
                 {
+                    b.HasOne("OnlineShopPodaci.Model.OrderStatus", "OrderStatus")
+                        .WithMany()
+                        .HasForeignKey("OrderStatusID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("OnlineShopPodaci.Model.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")

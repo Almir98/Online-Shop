@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "AddCategory";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<br />
+<h3>Nova kategorija</h3>
+<br />
+@model AddCategoryVM
+
+
+<form enctype="multipart/form-data" asp-action="SaveCategory">
+
+    <div class="form-group">
+        <label>Naziv kategorije :</label>
+        <input asp-for="categoryName" class="form-control" required />
+    </div>
+    <br />
+
+    <p>URL slike:</p>
+    <div class="custom-file">
+        <input asp-for="Image" class="form-control custom-file-input"/><br />
+
+        <label class="custom-file-label">Izaberi sliku</label>
+    </div>
+
+    <br />
+    <br />
+
+    <input type="submit" value="Sačuvaj" class="btn btn-primary" />
+</form>

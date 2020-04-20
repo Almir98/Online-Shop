@@ -16,10 +16,28 @@ namespace OnlineShopServices
             _context = b;
         }
 
+        public void AddCategory(Category category)
+        {
+            _context.Add(category);
+            _context.SaveChanges();
+        }
+
+        public void AddManufacturer(Manufacturer manufacturer)
+        {
+            _context.Add(manufacturer);
+            _context.SaveChanges();
+        }
+
         public void AddProduct(Product p)
         {
             _context.Add(p);
             //_context.SaveChanges();
+        }
+
+        public void AddSubCategory(SubCategory subcategory)
+        {
+            _context.Add(subcategory);
+            _context.SaveChanges();
         }
 
         public List<Product> GetAllProducts()

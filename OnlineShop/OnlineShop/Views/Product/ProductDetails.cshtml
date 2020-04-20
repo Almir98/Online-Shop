@@ -18,7 +18,7 @@
     #leftDiv{
         float:left;
         height:555px;
-        width:50%;
+        width:45%;
     }
     
     #rightDiv{
@@ -43,8 +43,8 @@
     }
 
     #imagediv2{
-        width:70%;
-        height:60%;
+        width:50%;
+        height:50%;
         background-color:white;
         margin:50px;
         height:auto;
@@ -72,36 +72,57 @@
         text-align: left;
         overflow:hidden;
         resize: none;
+         outline: none;
     }
 
     #button:hover {
         cursor: default;
     }
 
+     #content{
+        width:70%;
+        margin:auto;
+        float:right;
+    }
+
+     #desninav{
+        width:20%;
+        background-color:lightgray;
+        float:right;
+        height:615px;
+    }
+
 </style>
 
+<div id="desninav">
+    za neku reklamu sliku
+</div>
+
+<div id="content">
 
 
-<div id="mainDiv">
-    <div id="leftDiv">
-        <div id="imagediv2">
-            <img id="picture" src="~/images/@(Model.ImageUrl)" />
 
+    <div id="mainDiv">
+        <div id="leftDiv">
+            <div id="imagediv2">
+                <img id="picture" src="~/images/@(Model.ImageUrl)" />
+
+            </div>
+            @*<img src="/partners@(item.AdPath)" alt="" id="adimg"
+                title="@item.AdName" width:"50px" height="50px" />*@
         </div>
-        @*<img src="/partners@(item.AdPath)" alt="" id="adimg"
-             title="@item.AdName" width:"50px" height="50px" />*@
-    </div>
         <div id="rightDiv">
             <div id="title">
                 <input asp-for="ProductID" hidden />
                 <h2>@Model.ProductName</h2>
                 <h4>Proizvođač : @Model.ManufacturerName</h4>
-                <h6>Stanje :  
-                <input id="button" type="button" readonly class="btn btn-success" value="Novo" />
+                <h6>
+                    Stanje :
+                    <input id="button" type="button" readonly class="btn btn-success" value="Novo" />
                 </h6>
             </div>
             <div id="rightContent">
-                <p style="text-align: left;"><b>Opis proizvoda :</b></p>
+                <p style="text-align: left; "><b>Opis proizvoda :</b></p>
                 <textarea id="textarea" readonly style="border:none">@Model.Description</textarea>
             </div>
             <div id="rightFooter">
@@ -111,5 +132,6 @@
 
             </div>
         </div>
-</div>
+    </div>
 
+</div>

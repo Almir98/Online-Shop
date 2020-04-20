@@ -3,6 +3,13 @@
 
 @model List<ShowCategoriesVM>
 
+@{
+    ViewData["Title"] = "Show";
+    Layout = "_Layout";
+
+
+}
+
 <style>
 
     #maindiv {
@@ -12,9 +19,10 @@
         padding: 0px;
         border-radius: 5px;
     }
-      #maindiv:hover {
-      opacity: 0.9;
-     }
+
+        #maindiv:hover {
+            opacity: 0.9;
+        }
 </style>
 
 
@@ -22,17 +30,17 @@
 {
     <a href="/Product/ShowSubCategories?ID=@c.CategoryID">
 
-    <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
-        <div class="card h-100">
-            <img class="card-img-top" src="http://placehold.it/700x400" alt="">
+        <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img class="card-img-top" src="http://placehold.it/700x400" alt="">
 
-            <div class="card-body">
-                <h4 style="color:blue" class="card-title">
-                    @c.CategoryName
-                </h4>
+                <div class="card-body">
+                    <h4 style="color:blue" class="card-title">
+                        @c.CategoryName
+                    </h4>
+                </div>
             </div>
         </div>
-    </div>
     </a>
 }
 

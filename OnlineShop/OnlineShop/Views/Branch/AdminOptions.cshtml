@@ -5,13 +5,12 @@
 
 @model AdminOptionsVM
 
-<h5>Admin opcije</h5>
 
 <input asp-for="productID" hidden />
 
 <table>
     <tr>
-        <td>Uredi proizvod</td>
+        @*<td>Uredi proizvod</td>
         <td>
             <a id="quatity-@Model.productID" class="btn btn bg-info">Uredi</a>
 
@@ -29,13 +28,13 @@
             </script>
 
         </td>
-    </tr>
+    </tr>*@
 
     <tr>
         <td>Izbriši proizvod</td>
 
         <td>
-            <a class="btn btn-danger" href="/Product/Delete?ID=@Model.productID">Obrisi</a>
+            <a class="btn btn-danger" href="/Product/Delete?ID=@Model.productID">Izbriši</a>
 
         </td>
     </tr>
