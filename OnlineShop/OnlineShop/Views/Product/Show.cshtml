@@ -16,8 +16,9 @@
     }
 </style>
 
-<h1>Prikaz svih proizvoda</h1>
-
+<br />
+<h2>Prikaz svih proizvoda</h2>
+<br />
 <div id="test">
 
     <form method="get" asp-action="Show" asp-route-search="search">
@@ -25,7 +26,7 @@
         <p @ViewBag.ID />
 
         <input type="search" placeholder="Unesite šifru ili naziv proizvoda" value="@ViewData["data"]" name="search" style="width:300px" />
-        <input type="submit" class="btn btn-success" value="Pretraži" />
+        <input type="submit" class="btn btn-dark" value="Pretraži" />
 
     </form>
 
@@ -34,7 +35,7 @@
     <tr>
         <th>Šifra proizvoda</th>
         <th>Naziv podkategorije</th>
-        <th>Naziv proizvodjaca</th>
+        <th>Naziv proizvođača</th>
         <th>Naziv proizvoda</th>
         <th>Opis</th>
         <th>Cijena</th>

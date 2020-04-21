@@ -4,7 +4,8 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Prikaz svih poslovnica</h1>
+<br />
+<h2>Prikaz poslovnica</h2>
 <br />
 @model List<ShowAllBranchesVM>
 <style>
@@ -22,7 +23,7 @@
         <p @ViewBag.ID />
 
         <input type="search" placeholder="Unesite grad ili naziv poslovnice" value="@ViewData["data"]" name="search" style="width:300px" />
-        <input type="submit" class="btn btn-success" value="Pretraži" />
+        <input type="submit" class="btn btn-dark" value="Pretraži" />
 
     </form>
 

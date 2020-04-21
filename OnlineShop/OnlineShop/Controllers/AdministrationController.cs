@@ -124,18 +124,19 @@ namespace OnlineShop.Controllers
             }
             order.OrderStatusID = 2;
             order.OrderStatus = _database.orderstatus.Find(2);
+            order.ShipDate = DateTime.Now;
             _database.SaveChanges();
 
             return PartialView("SuccessMessage");
         }
         public IActionResult CancelOrder(int orderid)
         {
-            var order = _database.order.Find(orderid);
+            var order = _database.order.FirstOrDefault(a=>a.OrderID==orderid);
             order.OrderStatusID = 3;
             order.OrderStatus = _database.orderstatus.Find(3);
-            foreach(var x in _database.orderdetails.Where(a => a.OrderID == orderid).ToList())
+            foreach(var x in _database.orderdetails.Include(p => p.Product).Where(a => a.OrderID == orderid).ToList())
             {
-                x.Product.UnitsInStock += x.Quantity;
+                x.Product.UnitsInStock += x.Quantity;  //vracamo tu kolicinu u UnitsInStock jer je s tog mjesta prividno oduzeto, dok je narudzba potvrdjena. U slucaju da se narudzba odobri, onda se oduzima i iz poslovnica. U slucaju otkazivanja narudzbe, vraca se kolicina na UnitsInStock
             }
             _database.SaveChanges();
 
@@ -211,6 +212,7 @@ namespace OnlineShop.Controllers
             var user = _database.user.Where(u => u.Id == id).Include(u => u.City).Include(u => u.Gender).FirstOrDefault();
             var model = new EditAdminProfileVM
             {
+                Id=id,
                 Name=user.Name,
                 Surname=user.Surname,
                 BirthDate=user.BirthDate,
@@ -223,5 +225,21 @@ namespace OnlineShop.Controllers
             };
             return View(model);
         }
+
+        [HttpPost]
+        public IActionResult EditAdminProfile(EditAdminProfileVM model)
+        {
+            var user = _database.user.Find(model.Id);
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.BirthDate = model.BirthDate;
+            user.CityID = model.CityID;
+            user.Adress = model.Adress;
+            user.PhoneNumber = model.PhoneNumber;
+            user.GenderID = model.GenderID;
+            _database.SaveChanges();
+            return RedirectToAction("Index", "Administration");
+        }
+
     }
 }

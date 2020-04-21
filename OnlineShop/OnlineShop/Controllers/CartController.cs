@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.ViewModels;
 using OnlineShopPodaci;
@@ -21,6 +22,8 @@ namespace OnlineShop.Controllers
             _cart = cart;
             _database = db;
         }
+
+        [Authorize(Roles = "Customer")]
 
         public IActionResult AddToCart(int productid,int q = 1)
         {

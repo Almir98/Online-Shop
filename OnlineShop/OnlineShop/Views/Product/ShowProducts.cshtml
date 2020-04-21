@@ -70,7 +70,6 @@
         height: auto;
         display: flex;
         height: 170px;
-        margin: auto;
     }
 
     #slika {
@@ -98,10 +97,21 @@
 
     #lijevinav{
         width:20%;
-        background-color:lightgray;
         float:left;
         height:615px;
     }
+
+    #slika2{
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto\9;
+        object-fit: cover;
+        margin-left:45px;
+        margin-top:125px;
+
+    }
+
 
 
 </style>
@@ -113,13 +123,15 @@
 </div>
 
 <div id="lijevinav">
-    za neku reklamu sliku
+
+        @*<img id="slika2" src="~/images/test.PNG" />*@
+    <img id="slika2" src="~/images/test2.PNG" />
+
+
 </div>
 
 
 <div id="content">
-
-
 
     <div id="test">
 
@@ -127,7 +139,7 @@
 
             <p @ViewBag.ID />
 
-            <input type="search" placeholder="Unesite proizvođača ili naziv proizvoda" value="@ViewData["data"]" name="search" style="width:300px" />
+            <input type="search" placeholder="Unesite proizvođača ili naziv proizvoda" value="@ViewData["data"]" name="search" style="width: 300px" />
             <input type="submit" class="btn btn-primary" value="Pretraži" />
 
         </form>

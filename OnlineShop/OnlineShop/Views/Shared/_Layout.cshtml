@@ -9,6 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - OnlineShop</title>
 
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* script for Live chat *@
+    <script type='text/javascript' data-cfasync='false'>window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({ c: '5d0ac46b-cc60-4eea-8534-5aeaf7ee35fc', f: true }); done = true; } }; })();</script>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
@@ -27,6 +36,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex @*flex-sm-row-reverse*@">
+        
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -41,7 +51,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Show2">Kupovina</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="LookInCart">Pogledaj kosaricu</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="LookInCart"></a>
                         </li>
 
                     </ul>
@@ -76,11 +86,7 @@
         </nav>
     </header>
 
-
-
-
     @* NOVA TEMAAAAAAAA *@
-
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -97,7 +103,8 @@
                     </li>
                     @*<li class="nav-item" style="margin-top:8px">
                             <a class="nav-link text-white" asp-area="" asp-controller="Product" asp-action="Show2">Kupovina</a>
-                        </li>*@
+                        </li>
+                    *@
                     <li class="nav-item" style="margin-top:8px">
                         <a class="nav-link text-white" asp-area="" asp-controller="Cart" asp-action="LookInCart">Pogledaj kosaricu</a>
                     </li>
@@ -133,45 +140,44 @@
     </nav>
 
 
-        @RenderBody()
+    @RenderBody()
 
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
 
-        @* script for Live chat *@
-        <script type='text/javascript' data-cfasync='false'>window.purechatApi = { l: [], t: [], on: function () { this.l.push(arguments); } }; (function () { var done = false; var script = document.createElement('script'); script.async = true; script.type = 'text/javascript'; script.src = 'https://app.purechat.com/VisitorWidget/WidgetScript'; document.getElementsByTagName('HEAD').item(0).appendChild(script); script.onreadystatechange = script.onload = function (e) { if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) { var w = new PCWidget({ c: '5d0ac46b-cc60-4eea-8534-5aeaf7ee35fc', f: true }); done = true; } }; })();</script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-        @* scripts for signalR *@
+    
+    @* scripts for signalR *@
 
-        <script src="~/vendor/jquery-3.2.1.min.js"></script>
-        <script src="~/lib/aspnet-signalr/signalr.js"></script>
-        <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/vendor/jquery-3.2.1.min.js"></script>
+    <script src="~/lib/aspnet-signalr/signalr.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
 
-        <script>
-            "use strict"
+    <script>
+        "use strict"
 
-            $(document).ready(() => {
-                let connection = new signalR.HubConnectionBuilder().withUrl("/notification").build();
+        $(document).ready(() => {
+            let connection = new signalR.HubConnectionBuilder().withUrl("/notification").build();
 
-                connection.on("OnMessageReceived", (message) => {
-                    console.log(message);
+            connection.on("OnMessageReceived", (message) => {
+                console.log(message);
 
-                    toastr.options = {
-                        "positionClass": "toast-bottom-right",
-                        "timeOut": "5000"
-                    };
+                toastr.options = {
+                    "positionClass": "toast-bottom-right",
+                    "timeOut": "5000"
+                };
 
-                    toastr.info(message);
-                });
-
-                connection.start().then(() => console.log('SignalR connection started...')).catch(err => console.error(err));
-
+                toastr.info(message);
             });
-        </script>
 
-        @RenderSection("Scripts", required: false)
+            connection.start().then(() => console.log('SignalR connection started...')).catch(err => console.error(err));
+
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

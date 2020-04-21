@@ -24,6 +24,7 @@
         border-radius: 5px;
         height: 230px;
         margin-left:35px;
+        border: 1px solid rgba(0,0,0,.125);
     }
 
         #maindiv:hover {
@@ -40,24 +41,27 @@
         margin-top: 550px;
     }
 
-    #content{
-        width:75%;
-        margin:auto;
-        float:left;
+    #content {
+        width: 75%;
+        margin: auto;
+        float: left;
     }
 
     #lijevinav{
         width:20%;
-        background-color:lightgray;
         float:left;
         height:615px;
     }
 
     #imagediv {
         width: auto;
-        height: auto;
-        display: flex;
         height: 170px;
+        display: flex;
+        height: 180px;
+    }
+
+    #header {
+        height: 60px;
     }
         
     #slika {
@@ -66,21 +70,30 @@
         height: auto;
         width: auto\9;
         object-fit: cover;
-        margin:auto;
+        margin: auto;
+    }
 
+    #slika2{
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto\9;
+        object-fit: cover;
+        margin-left:45px;
+        margin-top:40px;
     }
 
 
 </style>
 
 <div id="lijevinav">
-    za neku reklamu sliku 
+
+    <img id="slika2" src="~/images/test3.PNG" />
+
 </div>
 
 
 <div id="content">
-
-
 
 <h5>@ViewBag.Name</h5>
 
@@ -89,20 +102,20 @@
     <a href="/Product/ShowProducts?ID=@x.SubCategoryID" &string="">
 
         <div id="maindiv" class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card h-100">
                 <div id="imagediv">
 
                     <img id="slika" src="~/images/@x.imageurl" alt="">
                 </div>
 
-                <div class="card-body">
-                    <h4 style="color:blue" class="card-title">
-                        @x.SubCategoryName
-                    </h4>
+                <div id="header">
+                    <div class="card-body">
+                        <h4 style=" color: blue; text-align: center;" class="card-title">
+                            @x.SubCategoryName
+                        </h4>
+                    </div>
                 </div>
             </div>
-        </div>
-    </a>
+</a>
 }
 
 <div id='Paging' style="text-align: center">

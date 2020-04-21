@@ -1,7 +1,57 @@
 ﻿
 @{
-    ViewData["Title"] = "EditAdminProfile";
-}
+    ViewData["Title"] = "Izmjena podataka";
+        Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
-<h1>EditAdminProfile</h1>
+}
+@model EditAdminProfileVM
+<style>
+    #f1{
+        padding:20px;
+        border-radius: 25px;
+        border: 10px solid #7E191B;
+        width:80%;
+        margin:auto;
+        margin-top:50px;
+    }
+    .form-group{
+        width:50%;
+        margin:auto;
+        text-align:center;
+        padding:15px;
+    }
+  
+
+</style>
+
+
+    <form id="f1" method="post" class="text-danger bg-dark">
+            <h3 class="font-weight-bold text-center">Izmjena osnovnih podataka</h3>
+            <div class="form-group ">
+                <input asp-for="Id" hidden/>
+                <label>Ime:</label><input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Prezime:</label><input asp-for="Surname" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Datum rođenja:</label><input asp-for="BirthDate" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label>Grad:</label><select asp-for="CityID" asp-items="Model.City" class="form-control"></select>
+                <label>Adresa:</label><input asp-for="Adress"  class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>Broj telefona:</label><input asp-for="PhoneNumber" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Spol:</label><select asp-for="GenderID" asp-items="Model.Gender" class="form-control"></select>
+
+            </div>        
+            
+            <button type="submit" class="btn btn-danger">Spremi</button>
+        
+
+</form>
 

@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <br />
-<h1>Prikaz proizvoda na skladištu</h1>
+<h2>Prikaz proizvoda na skladištu</h2>
 
 @model List<ShowProductsInStockVM>
 
@@ -23,7 +23,7 @@
 
 
         <input type="search" placeholder="Unesite naziv proizvoda" value="@ViewData["data"]" name="search" style="width:300px" />
-        <input type="submit" class="btn btn-success" value="Pretraži" />
+        <input type="submit" class="btn btn-dark" value="Pretraži" />
 
     </form>
 
@@ -37,7 +37,7 @@
         <tr>
             <th>Naziv proizvoda</th>
             <th>Cijena po komadu</th>
-            <th>Kolicina</th>
+            <th>Količina</th>
         </tr>
     </thead>
     <tbody>

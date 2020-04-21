@@ -17,17 +17,26 @@ namespace OnlineShop.Controllers
     {
 
         private readonly ILogger<HomeController> _logger;
+        private readonly IProduct _Iproduct;
+        private readonly OnlineShopContext _database;
 
-
-        public HomeController(ILogger<HomeController> logger,OnlineShopContext onlineShopContext)
+        public HomeController(ILogger<HomeController> logger,OnlineShopContext onlineShopContext,IProduct product)
         {
             _logger = logger;
+            _database = onlineShopContext;
+            _Iproduct = product;
         }
-
 
         public IActionResult Index()
         {
-            return View();
+            List<ShowCategoriesVM> data = _database.category.Select(c => new ShowCategoriesVM
+            {
+                CategoryID = c.CategoryID,
+                CategoryName = c.CategoryName,
+                imageurl = c.ImageUrl
+            }).ToList();
+
+            return View(data);
         }
 
         public IActionResult Privacy()
