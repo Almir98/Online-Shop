@@ -18,14 +18,14 @@
         <select asp-for="categoryID" asp-items="@Model._lista" class="form-control" required>
             <option>Odaberite kategoriju</option>
         </select>
+        <span asp-validation-for="categoryID" class="text-danger"></span>
     </div>
-    <br />
 
     <div class="form-group">
         <label>Naziv podkategorije :</label>
         <input asp-for="subcategoryName" class="form-control" required />
+        <span asp-validation-for="subcategoryName" class="text-danger"></span>
     </div>
-    <br />
 
     <p>URL slike:</p>
     <div class="custom-file">

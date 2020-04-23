@@ -4,98 +4,130 @@
 @{
     ViewData["Title"] = "ProductDetails";
     //var photoPath = "~/images/" + (Model.Image);
-   
+
 
 }
 
 
 <style>
-    #mainDiv{
-        height:555px;
-        margin:auto;
+     #Added {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10000;
+        width: 100%;
+        height: 50px;
+        padding: 15px 25px 15px 10px;
+        line-height: 16px;
+        color: #fff;
+        background-color: #91BD09;
+        opacity: 0.95;
+        text-align: center;
+        box-sizing: border-box;
+        border-radius: 0px 0px 5px 5px;
     }
 
-    #leftDiv{
-        float:left;
-        height:555px;
-        width:45%;
+    #mainDiv {
+        height: 555px;
+        margin: auto;
     }
-    
-    #rightDiv{
-        float:left;
-        height:555px;
-        width:50%;
+
+    #leftDiv {
+        float: left;
+        height: 555px;
+        width: 45%;
+    }
+
+    #rightDiv {
+        float: left;
+        height: 555px;
+        width: 50%;
     }
 
     #title {
-        width:100%;
-        height:120px;
+        width: 100%;
+        height: 120px;
     }
 
-    #rightContent{
-        width:100%;
-        height:300px;
+    #rightContent {
+        width: 100%;
+        height: 300px;
     }
 
-    #rightFooter{
-        height:70px;
-
+    #rightFooter {
+        height: 70px;
     }
 
-    #imagediv2{
-        width:50%;
-        height:50%;
-        background-color:white;
-        margin:50px;
-        height:auto;
-        width:auto;
+    #imagediv2 {
+        width: 50%;
+        height: 50%;
+        background-color: white;
+        margin: 50px;
+        height: auto;
+        width: auto;
     }
 
-    #picture{
-         max-width: 95%;
+    #picture {
+        max-width: 95%;
         max-height: 90%;
-        margin:auto;
+        margin: auto;
         height: auto;
         width: auto\9;
         object-fit: cover;
     }
 
-    #rightContent{
-        width:100%;
-        height:350px;
-        text-align:left;
+    #rightContent {
+        width: 100%;
+        height: 350px;
+        text-align: left;
     }
 
     #textarea {
         width: 100%;
         height: 300px;
         text-align: left;
-        overflow:hidden;
+        overflow: hidden;
         resize: none;
-         outline: none;
+        outline: none;
     }
 
     #button:hover {
         cursor: default;
     }
 
-     #content{
-        width:70%;
-        margin:auto;
-        float:right;
+    #content {
+        width: 70%;
+        margin: auto;
+        float: right;
     }
 
-     #desninav{
-        width:20%;
-        background-color:lightgray;
-        float:right;
-        height:615px;
+    #desninav {
+        width: 20%;
+        float: right;
+        height: 615px;
     }
 
+    #slika2 {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto\9;
+        object-fit: cover;
+        margin-left: 40px;
+        margin-top: 5px;
+    }
 </style>
 
+<div id="Added">
+    Artikal uspješno dodan u korpu !
+
+</div>
+
 <div id="desninav">
-    za neku reklamu sliku
+
+    <img id="slika2" src="~/images/side2.PNG" />
+
 </div>
 
 <div id="content">
@@ -127,7 +159,8 @@
             </div>
             <div id="rightFooter">
 
-                <h5>Cijena: @Model.UnitPrice KM sa  PDV-om</h5>
+                <h5>Cijena: @Model.UnitPrice KM sa  PDV-om</h5> <br /> 
+                <input type="number" id="@Model.ProductID" value="1" min="1" max="@Model.UnitsInStock" /> 
                 <button class="btn btn-primary" onclick="AddToCart(@Model.ProductID)">Dodaj u korpu</button>
 
             </div>
@@ -135,3 +168,23 @@
     </div>
 
 </div>
+
+<script>
+
+    function AddToCart(id) {
+
+        var quantity = document.getElementById(id).value;
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () { };
+        request.open('POST', "/Cart/AddToCart/?productid=" + id + "&q=" + quantity);
+        request.send()
+        document.getElementById(id).value = 1;
+        document.getElementById("Added").style.display = "block";
+        setTimeout(function () {
+            document.getElementById("Added").style.display = "none";
+        }, 3500);
+
+        //alert("Proizvod dodan u korpu !");
+    }
+
+</script>

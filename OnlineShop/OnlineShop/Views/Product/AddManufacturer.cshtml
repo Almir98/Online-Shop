@@ -21,7 +21,7 @@
     <p>Naziv proizvođača</p>
     <div class="custom-file">
         <input class="form-control" type="text" asp-for="manufacturerName" />
-        <br />
+        <span asp-validation-for="manufacturerName" class="text-danger"></span>
     </div>
 
     <p>Logo URL:</p>

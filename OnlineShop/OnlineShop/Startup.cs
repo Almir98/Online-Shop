@@ -44,6 +44,8 @@ namespace OnlineShop
             services.AddScoped<INotification, NotificationService>();
 
             services.AddDbContext<OnlineShopContext>(c => c.UseSqlServer(Configuration.GetConnectionString("OnlineShopCS")));
+
+            services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

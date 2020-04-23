@@ -134,9 +134,10 @@ namespace OnlineShop.Controllers
             var order = _database.order.FirstOrDefault(a=>a.OrderID==orderid);
             order.OrderStatusID = 3;
             order.OrderStatus = _database.orderstatus.Find(3);
-            foreach(var x in _database.orderdetails.Include(p => p.Product).Where(a => a.OrderID == orderid).ToList())
+            var list = _database.orderdetails.Include(p => p.Product).Where(s => s.OrderID == orderid).ToList();
+            foreach(var x in list)
             {
-                x.Product.UnitsInStock += x.Quantity;  //vracamo tu kolicinu u UnitsInStock jer je s tog mjesta prividno oduzeto, dok je narudzba potvrdjena. U slucaju da se narudzba odobri, onda se oduzima i iz poslovnica. U slucaju otkazivanja narudzbe, vraca se kolicina na UnitsInStock
+                _database.product.Find(x.ProductID).UnitsInStock += x.Quantity;  //vracamo tu kolicinu u UnitsInStock jer je s tog mjesta prividno oduzeto, dok je narudzba potvrdjena. U slucaju da se narudzba odobri, onda se oduzima i iz poslovnica. U slucaju otkazivanja narudzbe, vraca se kolicina na UnitsInStock
             }
             _database.SaveChanges();
 
@@ -163,9 +164,31 @@ namespace OnlineShop.Controllers
                 }
 
             }
-            IPagedList<ListOfCustomersVM> lista = model.ToPagedList(page ?? 1, 5);
+            IPagedList<ListOfCustomersVM> lista = model.ToPagedList(page ?? 1, 9);
             return View(lista);
         }
+        public async Task<IActionResult> ListOfAdmins(int? page)
+        {
+            List<ListOfAdminsVM> model = new List<ListOfAdminsVM>();
+            foreach (var user in userManager.Users)
+            {
+                if (await userManager.IsInRoleAsync(user, "Admin"))
+                {
+                    model.Add(new ListOfAdminsVM
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Firstname = user.Name,
+                        LastName = user.Surname,
+                        PhoneNumber = user.PhoneNumber
+                    });
+                }
+
+            }
+            IPagedList<ListOfAdminsVM> lista = model.ToPagedList(page ?? 1, 6);
+            return View(lista);
+        }
+
         public async Task<IActionResult> SetForAdmin(int id)
         {
             var user = await userManager.FindByIdAsync(id.ToString());

@@ -12,7 +12,6 @@
 }
 
 
-@*<h1>@Model.First().CategoryName</h1>*@
 <br />
 
 <style>
@@ -79,19 +78,26 @@
         height: auto;
         width: auto\9;
         object-fit: cover;
-        margin-left:45px;
-        margin-top:40px;
+        margin-left:65px;
+        margin-top:5px;
     }
 
+    .pagination{
+        background-color:lightgrey;
+        color:white;
+        padding:10px;
+        width:370px;
+        margin:auto;
+    }
 
+    .pagination li{
+        padding:0 15px;
+    }
 </style>
 
 <div id="lijevinav">
-
-    <img id="slika2" src="~/images/test3.PNG" />
-
+    <img id="slika2" src="~/images/side3.PNG" />
 </div>
-
 
 <div id="content">
 
@@ -118,9 +124,8 @@
 </a>
 }
 
-<div id='Paging' style="text-align: center">
+<div id='paging' style="text-align: center">
 
     @Html.PagedListPager(Model, page => Url.Action("ShowSubCategories", new { page, Model[0].ID }))
 </div>
-
 </div>

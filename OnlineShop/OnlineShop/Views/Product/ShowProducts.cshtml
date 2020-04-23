@@ -29,7 +29,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 1000;
+        z-index: 10000;
         width: 100%;
         height: 50px;
         padding: 15px 25px 15px 10px;
@@ -176,7 +176,7 @@
 
                         <p class="card-text">Cijena : @o.unitPrice   KM</p>
                         <p class="card-text">Proizvođač : @o.manufacturerName</p>
-                        <input type="number" id="@o.productID" value="1" min="1" />
+                        <input type="number" id="@o.productID" value="1" min="1" max="@o.unitsInStock" />
                         <br><br />
                         <div id="button">
                             <button class="btn btn-primary" onclick="AddToCart(@o.productID)">Dodaj u košaricu</button>
@@ -197,7 +197,7 @@
             //user,productid,quantity are sent
             var request = new XMLHttpRequest();
             request.onreadystatechange = function () { };
-            request.open('POST', "/Cart/AddToCart/?productid=" + id + "&userid=" + 19 + "&q=" + quantity);
+            request.open('POST', "/Cart/AddToCart/?productid=" + id +"&q=" + quantity);
             request.send()
             document.getElementById(id).value = 1;
             document.getElementById("Added").style.display = "block";

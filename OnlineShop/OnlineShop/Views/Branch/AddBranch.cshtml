@@ -14,13 +14,13 @@
     <div class="form-group">
         <label>Naziv poslovnice :</label>
         <input asp-for="branchName" class="form-control" required />
-        @*<span asp-validation-for="branchName" class="text-danger"></span>*@
+        <span asp-validation-for="branchName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label>Adresa :</label>
         <input asp-for="adress" class="form-control" required />
-        @*<span asp-validation-for="branchName" class="text-danger"></span>*@
+        <span asp-validation-for="adress" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -29,14 +29,11 @@
             <option>Odaberite grad</option>
         </select>
     </div>
-    <a href="">Dodajte novi grad</a>
-    <br />
-    <br />
 
     <div class="form-group">
         <label>Broj telefona :</label>
         <input asp-for="phoneNumber" class="form-control" placeholder="061 000 000" required />
-        @*<span asp-validation-for="branchName" class="text-danger"></span>*@
+        <span asp-validation-for="phoneNumber" class="text-danger"></span>
     </div>
 
     Radno vrijeme :<br />

@@ -14,9 +14,11 @@ using X.PagedList;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly IProduct _Iproduct;
@@ -154,7 +156,7 @@ namespace OnlineShop.Controllers
                 {
                     var st_pr = new StockProduct            // medjutabela
                     {
-                        StockID = 1,                                                                         // jer je samo 1 skladiste
+                        StockID = 1,                                                                        
                         ProductID = neki.ProductID,
                         Quantity = neki.UnitsInStock
                     };
@@ -186,7 +188,6 @@ namespace OnlineShop.Controllers
                 string filePath = Path.Combine(uploadsFolder, uniquefileName);
                 model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
             }
-
             Manufacturer manufacturer = new Manufacturer
             {
                 ManufacturerName = model.manufacturerName,
@@ -199,8 +200,7 @@ namespace OnlineShop.Controllers
         public IActionResult AddCategory()
         {
             var model = new AddCategoryVM
-            {
-            };
+            {};
             return View(model);
         }
 
@@ -257,9 +257,6 @@ namespace OnlineShop.Controllers
             return Redirect("/Administration/Index");
         }
 
-
-
-
         public IActionResult Show2()       
         {
            List<ShowCategoriesVM >data = _database.category.Select(c => new ShowCategoriesVM
@@ -268,10 +265,10 @@ namespace OnlineShop.Controllers
                CategoryName = c.CategoryName,
                imageurl=c.ImageUrl
            }).ToList();
-            
             return View(data);
         }
 
+        [AllowAnonymous]
         public IActionResult ShowSubcategories(int id,string search,int? page)          // ID kategorije
         {
 
@@ -294,6 +291,7 @@ namespace OnlineShop.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ShowProducts(int ID,string search)       // ID podkategorije 
         {
             ViewData["data"] = search;
@@ -321,6 +319,7 @@ namespace OnlineShop.Controllers
             return View(await query.ToListAsync());
         }
 
+        [AllowAnonymous]
         public IActionResult ProductDetails(int ID)     // ID proizvoda
         {
             ProductDetailsVM model = _database.product.Where(s=>s.ProductID==ID).Select(a => new ProductDetailsVM
@@ -363,7 +362,6 @@ namespace OnlineShop.Controllers
             }
             return View(await query.ToListAsync());
         }
-
         public IActionResult DistributeProduct(int productID)
         {
             var product = _Iproduct.GetProductByID(productID);
@@ -392,6 +390,7 @@ namespace OnlineShop.Controllers
                     stockQuanttity=_database.stockproduct.Where(a=>a.StockID==e.StockID && product.ProductID==a.ProductID).Select(a=>a.Quantity).FirstOrDefault()
                 }).ToList()
             };
+            ViewData["err"] = TempData["error"];
             return View(model);
         }
 
@@ -403,13 +402,13 @@ namespace OnlineShop.Controllers
             foreach (var i in model._list)
             {
                 var bp = _database.branchproduct.Where(e => e.BranchID == i.branchID && e.ProductID==product.ProductID).FirstOrDefault();
-                if (bp!=null && model.productID == bp.ProductID)
-                {
-                    bp.UnitsInBranch += i.quntityPerBranch;
+
+                if (bp!=null && model.productID == bp.ProductID){
+                    bp.UnitsInBranch += i.quntityPerBranch;     
                 }
                 else
                 {
-                   var testing = new BranchProduct
+                   var testing = new BranchProduct  
                    {
                        BranchID = i.branchID,
                        ProductID = product.ProductID,
@@ -419,10 +418,18 @@ namespace OnlineShop.Controllers
                 }
                 sum+=i.quntityPerBranch;        // sabiraju se kolicine po prodavnicama
             }
-            _database.SaveChanges();
             var stock = _database.stockproduct.Where(e => e.ProductID == model.productID).FirstOrDefault();
 
-            stock.Quantity =stock.Quantity - sum;         
+            if (stock.Quantity >= sum)
+            {
+                stock.Quantity =stock.Quantity - sum;   // od skladista oduzmi UKUPNU KOLICINU ZA SVE POSLOVNICE
+                _database.SaveChanges();
+            }
+            else
+            {
+                TempData["error"] = "Unijeta količina nije dostupna, pokušajte ponovni unos";
+                return Redirect("/Product/DistributeProduct?productID="+product.ProductID);
+            }
             _database.SaveChanges();
             return Redirect("/Product/ShowStock");
         }

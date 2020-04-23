@@ -16,8 +16,9 @@
     <div class="form-group">
         <label>Naziv kategorije :</label>
         <input asp-for="categoryName" class="form-control" required />
+        <span asp-validation-for="categoryName" class="text-danger"></span>
+
     </div>
-    <br />
 
     <p>URL slike:</p>
     <div class="custom-file">

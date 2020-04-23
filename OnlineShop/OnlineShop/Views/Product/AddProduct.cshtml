@@ -18,25 +18,26 @@
 
     <p>Šifra proizvoda :</p>
     <input class="form-control" type="text" asp-for="ProductNumber" value="@Model.ProductNumber" required />
+    <span asp-validation-for="ProductNumber" class="text-danger"></span>
     <br />
 
     <p>Podkategorija :</p>
     <select class="form-control" asp-for="SubCategoryID" asp-items="@Model.Subcategories" required>
         <option>Odaberite podkategoriju proizvoda</option>
     </select>
+    <span asp-validation-for="SubCategoryID" class="text-danger"></span>
     <br />
 
     <p>Proizvođač :</p>
     <select class="form-control" asp-for="ManufacturerID" asp-items="@Model.Manufacturers" required>
         <option>Odaberite proizvodjaca</option>
     </select>
+    <span asp-validation-for="ManufacturerID" class="text-danger"></span>
     <br />
 
-    <a href="/Product/AddManufacturer?ProductID=@Model.ProductID">Dodaj novog proizvođača</a>
-
-    <br />
     <p>Naziv proizvoda :</p>
     <input class="form-control" type="text" asp-for="ProductName" value="@Model.ProductName" required />
+    <span asp-validation-for="ProductName" class="text-danger"></span>
     <br />
 
     <p>URL slike:</p>
@@ -49,14 +50,19 @@
     <p>Detaljan opis:</p>
     <textarea rows="6" cols="90" class="form-control" asp-for="Description" value="@Model.Description">
     </textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+
     <br />
 
     <p>Cijena :</p>
     <input class="form-control" type="text" asp-for="UnitPrice" min="0" required />
+    <span asp-validation-for="UnitPrice" class="text-danger"></span>
     <br />
 
     <p>Količina :</p>
     <input asp-for="UnitsInStock" class="form-control" min="0" required />
+    <span asp-validation-for="UnitsInStock" class="text-danger"></span>
+    <br />
     <br />
 
     <input class="btn btn-primary" type="submit" value="Sačuvaj" />

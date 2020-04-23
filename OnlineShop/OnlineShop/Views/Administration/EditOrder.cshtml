@@ -13,8 +13,7 @@
     Datum narudžbe<input readonly asp-for="OrderDate" value="@Model.OrderDate" /><br />
     Korisnik<input readonly value="@Model.UserInfo" /> <br />
     Status narudžbe<input value="@Model.OrderStatus" /> <br />
-    @if (Model.OrderStatus != "Shipped" && Model.OrderStatus != "Cancelled")
-    {
+   
         <table border="1">
 
             @for (var i = 0; i < Model.items.Count(); i++)
@@ -29,16 +28,17 @@
                     @*@Html.LabelFor(model=>model.items[i].ProductID)*@
                     <td>@Html.TextBoxFor(model => model.items[i].ProductID, new { @readonly = "readonly" })</td>
                     @*<input readonly asp-for="@x.ProductID" value="@x.ProductID" />*@
-                    <td>@Html.TextBoxFor(model => model.items[i].ProductName, new { @readonly = "readonly" })</td>
+                    <td><a style="color:black;" href="javascript:void(0)" onclick="location.href='/Product/ProductDetails?ID=@Model.items[i].ProductID'">@Model.items[i].ProductName</a></td>
                     <td>@Html.TextBoxFor(model => model.items[i].RequiredQuantity, new { @readonly = "readonly" })</td>
                 </tr>
-
+                 @if (Model.OrderStatus != "Shipped" && Model.OrderStatus != "Cancelled")
+                 {
                 <tr style="background-color: #969696; color: #fff"><th>Rb poslovnice</th><th>Poslovnica</th> <th>Stanje proizvoda</th> <th>Oduzmi od stanja</th></tr>
-                if (Model.items[i].branches.Any())
-                {
-                    for (int j = 0; j < Model.items[i].branches.Count(); j++)
+                     if (Model.items[i].branches.Any())
+                     {
+                         for (int j = 0; j < Model.items[i].branches.Count(); j++)
 
-                    {
+                         {
                         <tr>
                             <td><input readonly asp-for="@Model.items[i].branches[j].BranchID" value="@Model.items[i].branches[j].BranchID" /> </td>
                             <td>@Model.items[i].branches[j].BranchName</td>
@@ -51,23 +51,29 @@
                                 <td><input type="number" min="0" max="@Model.items[i].branches[j].AvailableQuantity" asp-for="@Model.items[i].branches[j].Input" /></td>
                             }
                         </tr>
-                    }
-                }
-                else
-                {
+                         }
+                     }
+                     else
+                     {
                     <tr><td><a href="javascript:void(0)" title="Proizvod nije dostupan niti u jednoj poslovnici. Raspodjelite isti sa skladišta !" onclick="location.href='/Product/DistributeProduct?productID='+@Model.items[i].ProductID">Raspodjeli !</a></td></tr>
-                }
+                         }
+                     }
 
-            }
+                 }
         </table>
-    }
-    @if (Model.items.Any(s => s.branches.Count == 0) || Model.OrderStatus == "Shipped")
+    
+    @if (Model.items.Any(s => s.branches.Count == 0) || Model.OrderStatus == "Shipped" || Model.OrderStatus=="Cancelled")
     {
-        {<button disabled type="submit" onclick="SaveChanges()" id="btn">Odobri narudžbu za slanje</button>}
+        {<button disabled type="submit" onclick="SaveChanges()" id="btn">Odobri narudžbu za slanje</button>
+        }
     }
+    else{
+    <button type="button" id="btn">Odobri narudžbu za slanje</button>} <br />
+
+    @if (Model.OrderStatus == "Shipped" || Model.OrderStatus == "Cancelled")
+    { <button disabled type="button" id="cancel">Poništi narudžbu</button>}
     else
-    {<button type="button" id="btn">Odobri narudžbu za slanje</button>} <br />
-    <button type="button" id="cancel">Poništi narudžbu</button>
+    {<button type="button" id="cancel">Poništi narudžbu</button>}
     <button type="button" onclick="location.href='/Administration/ShowOrders'">Nazad</button>
 </form>
     
