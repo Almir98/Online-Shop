@@ -36,6 +36,9 @@ namespace OnlineShopPodaci
         public DbSet<BranchProduct> branchproduct { get; set; }
         public DbSet<Branch> branch { get; set; }
         public DbSet<Role> role { get; set; }
+        public DbSet<Notification> notification { get; set; }
+        public DbSet<ActivitY> activity { get; set; }
+        public DbSet<AdminActivity> adminactivity { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

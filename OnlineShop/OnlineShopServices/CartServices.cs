@@ -2,6 +2,7 @@
 using OnlineShopPodaci.Model;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -67,8 +68,10 @@ namespace OnlineShopServices
         {
             //var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             if (q == 0) { RemoveCartItem(productid,userid); return; }
-            var obj = _database.cart.SingleOrDefault(s => s.UserID == userid && s.ProductID == productid);
+            var obj = _database.cart.FirstOrDefault(s => s.UserID == userid && s.ProductID == productid);
+            var prod = _database.product.Find(productid);
             obj.Quantity = q;
+            obj.TotalPrice =  prod.UnitPrice* q; //nedostajalo, bug until 26.4
             _database.SaveChanges();
         }
     }

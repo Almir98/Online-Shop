@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.ViewModels;
@@ -112,6 +113,13 @@ namespace OnlineShop.Controllers
                     Text=e.CityName
                 }).ToList()
             };
+            _context.Add(new AdminActivity
+            {
+                ActivityID = 9,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity = DateTime.Now
+            });
+            _context.SaveChanges();
             return View(model);
         }
 

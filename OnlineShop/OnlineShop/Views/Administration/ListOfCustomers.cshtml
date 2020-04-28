@@ -17,21 +17,22 @@
        
         width:50%;
         margin:auto;
-        background-color:dimgray;
         height:55px;
+        text-align:center;
+        padding-left:14%;
 
     }
     .pagination-container ul li {
         font-size:30px;
-        margin:auto;
-        background-color:gainsboro;
+        background-color:transparent;
         height:40px;
-        margin-top:10px;
-        padding:0 10px 2px 10px;
+        margin-top:7px;
+        padding:0 10px 10px 10px;
+        border:1px solid #000000;
         
         }
         .pagination-container ul li a {
-            color:dimgray;
+            color:red;
             margin:auto;
             
         }
@@ -56,9 +57,17 @@
                         <div class="card-header text-center text-danger">@c.Firstname @c.LastName</div>
 
                         <div class="card-body text-center">
-                            <img class="card-img-top" src="~/images/USER.png" style="width:100px" />
+                            @{
+                                if (c.ImageUrl != null)
+                                {
+                                    <img class="card-img-top" src="~/images/@c.ImageUrl" style="width:100px" />
 
-
+                                }
+                                else
+                                {
+                                    <img class="card-img-top" src="~/images/USER.png" style="width:100px" />
+                                }
+                            }
                         </div>
 
                         <div class="card-footer text-center">

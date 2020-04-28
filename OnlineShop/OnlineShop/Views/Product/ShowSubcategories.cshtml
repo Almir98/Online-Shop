@@ -12,6 +12,7 @@
 }
 
 
+@*<h1>@Model.First().CategoryName</h1>*@
 <br />
 
 <style>
@@ -36,9 +37,7 @@
         margin-bottom: 15px;
     }
 
-    .pagination-container {
-        margin-top: 550px;
-    }
+    
 
     #content {
         width: 75%;
@@ -81,23 +80,44 @@
         margin-left:65px;
         margin-top:5px;
     }
-
-    .pagination{
-        background-color:lightgrey;
-        color:white;
+    .pagination-container{
         padding:10px;
-        width:370px;
         margin:auto;
+        width:50%;
     }
+    .pagination-container ul{
+       
+        width:50%;
+        margin:auto;
+        height:55px;
+        text-align:center;
+        padding-left:14%;
 
-    .pagination li{
-        padding:0 15px;
     }
+    .pagination-container ul li {
+        font-size:30px;
+        background-color:transparent;
+        height:40px;
+        margin-top:7px;
+        padding:0 10px 10px 10px;
+        border:1px solid #000000;
+        
+        }
+        .pagination-container ul li a {
+            color:black;
+            margin:auto;
+            
+        }
+
+
+
 </style>
 
 <div id="lijevinav">
+
     <img id="slika2" src="~/images/side3.PNG" />
 </div>
+
 
 <div id="content">
 
@@ -128,4 +148,5 @@
 
     @Html.PagedListPager(Model, page => Url.Action("ShowSubCategories", new { page, Model[0].ID }))
 </div>
+
 </div>

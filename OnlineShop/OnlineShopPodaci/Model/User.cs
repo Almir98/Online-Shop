@@ -27,6 +27,8 @@ namespace OnlineShopPodaci.Model
         [ForeignKey("CreditCard")]
         public int? CreditCardID { get; set; }
         public CreditCard? CreditCard { get; set; }
+        public string ImageUrl { get; set; }
+
 
         public static ReadOnlySpan<char> FindFirstValue(string nameIdentifier)
         {

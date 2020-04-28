@@ -120,6 +120,46 @@ namespace OnlineShopPodaci.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("OnlineShopPodaci.Model.ActivitY", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("activity");
+                });
+
+            modelBuilder.Entity("OnlineShopPodaci.Model.AdminActivity", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ActivityID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdminID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfActivity")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ActivityID");
+
+                    b.HasIndex("AdminID");
+
+                    b.ToTable("adminactivity");
+                });
+
             modelBuilder.Entity("OnlineShopPodaci.Model.Branch", b =>
                 {
                     b.Property<int>("BranchID")
@@ -302,6 +342,29 @@ namespace OnlineShopPodaci.Migrations
                     b.HasKey("ManufacturerID");
 
                     b.ToTable("manufacturer");
+                });
+
+            modelBuilder.Entity("OnlineShopPodaci.Model.Notification", b =>
+                {
+                    b.Property<int>("NotificationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Read")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("notification");
                 });
 
             modelBuilder.Entity("OnlineShopPodaci.Model.Order", b =>
@@ -540,6 +603,9 @@ namespace OnlineShopPodaci.Migrations
                     b.Property<int>("GenderID")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -649,6 +715,21 @@ namespace OnlineShopPodaci.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OnlineShopPodaci.Model.AdminActivity", b =>
+                {
+                    b.HasOne("OnlineShopPodaci.Model.ActivitY", "Activity")
+                        .WithMany()
+                        .HasForeignKey("ActivityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineShopPodaci.Model.User", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("OnlineShopPodaci.Model.Branch", b =>
                 {
                     b.HasOne("OnlineShopPodaci.Model.City", "City")
@@ -693,6 +774,15 @@ namespace OnlineShopPodaci.Migrations
                     b.HasOne("OnlineShopPodaci.Model.CardType", "CardType")
                         .WithMany()
                         .HasForeignKey("CartTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OnlineShopPodaci.Model.Notification", b =>
+                {
+                    b.HasOne("OnlineShopPodaci.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

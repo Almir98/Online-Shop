@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<GetOrderDetailsVM>
+
+<h4>Detalji narudžbe</h4>
+<br />
+<style>
+    table{
+        background-color:white;
+        border:solid black 1.25px;
+    }
+</style>
+
+<table class="table table-hover" border="1">
+    <tr style="background-color: #696969; color: #fff">
+        <th>Šifra proizvoda</th> <th>Naziv</th> <th>Količina</th> <th>Cijena</th>
+    </tr>
+    @foreach(var x in Model)
+    {
+        <tr>
+            <td>@x.productnumber</td><td><a href="javascript:void(0)" onclick="location.href='/Product/ProductDetails?ID='+@x.productid">@x.productname</a></td> <td>@x.quantity</td><td>@x.price BAM</td>
+        </tr>
+    }
+</table>
+<button onclick="GetOrders()">Nazad</button>
+
+<script>
+    function GetOrders() {
+        $.get("/Customer/GetOrders", function (res) {
+            $("#orders").html(res);
+        });
+    }
+</script>
+

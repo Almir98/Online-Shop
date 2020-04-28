@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace OnlineShop.Controllers
 {
@@ -117,6 +118,13 @@ namespace OnlineShop.Controllers
                 UnitPrice = temp.UnitPrice,
                 UnitsInStock = temp.UnitsInStock
             };
+            _database.Add(new AdminActivity
+            {
+                ActivityID = 1,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity=DateTime.Now
+            });
+            _database.SaveChanges();
             return View(data);
         }
 
@@ -175,6 +183,14 @@ namespace OnlineShop.Controllers
             {
                 productID=ProductID
             };
+            _database.Add(new AdminActivity
+            {
+                ActivityID = 8,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity = DateTime.Now
+            });
+            _database.SaveChanges();
+
             return View(model);
         }
 
@@ -188,6 +204,7 @@ namespace OnlineShop.Controllers
                 string filePath = Path.Combine(uploadsFolder, uniquefileName);
                 model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
             }
+
             Manufacturer manufacturer = new Manufacturer
             {
                 ManufacturerName = model.manufacturerName,
@@ -200,7 +217,16 @@ namespace OnlineShop.Controllers
         public IActionResult AddCategory()
         {
             var model = new AddCategoryVM
-            {};
+            {
+            };
+            _database.Add(new AdminActivity
+            {
+                ActivityID = 2,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity = DateTime.Now
+            });
+            _database.SaveChanges();
+
             return View(model);
         }
 
@@ -234,6 +260,14 @@ namespace OnlineShop.Controllers
                     Text=e.CategoryName
                 }).ToList()
             };
+            _database.Add(new AdminActivity
+            {
+                ActivityID = 3,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity = DateTime.Now
+            });
+            _database.SaveChanges();
+
             return View(model);
         }
         public IActionResult SaveSubCategory(AddSubCategoryVM model)
@@ -362,6 +396,7 @@ namespace OnlineShop.Controllers
             }
             return View(await query.ToListAsync());
         }
+
         public IActionResult DistributeProduct(int productID)
         {
             var product = _Iproduct.GetProductByID(productID);
@@ -402,13 +437,14 @@ namespace OnlineShop.Controllers
             foreach (var i in model._list)
             {
                 var bp = _database.branchproduct.Where(e => e.BranchID == i.branchID && e.ProductID==product.ProductID).FirstOrDefault();
+                // ide u tabelu jel u toj prodavnici taj proizvod vec postoji
 
                 if (bp!=null && model.productID == bp.ProductID){
-                    bp.UnitsInBranch += i.quntityPerBranch;     
+                    bp.UnitsInBranch += i.quntityPerBranch;     // ako je u pitanju isti proizvod doda se kolicina samo
                 }
                 else
                 {
-                   var testing = new BranchProduct  
+                   var testing = new BranchProduct  // pravi se novi zapis te poslovnice tog proizvoda te kolicine
                    {
                        BranchID = i.branchID,
                        ProductID = product.ProductID,
@@ -419,11 +455,20 @@ namespace OnlineShop.Controllers
                 sum+=i.quntityPerBranch;        // sabiraju se kolicine po prodavnicama
             }
             var stock = _database.stockproduct.Where(e => e.ProductID == model.productID).FirstOrDefault();
+            // ode na skladiste uzme koliko ga ima tamo
 
             if (stock.Quantity >= sum)
             {
                 stock.Quantity =stock.Quantity - sum;   // od skladista oduzmi UKUPNU KOLICINU ZA SVE POSLOVNICE
+                _database.Add(new AdminActivity
+                {
+                    ActivityID = 7,
+                    AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    DateOfActivity = DateTime.Now
+                });
+
                 _database.SaveChanges();
+
             }
             else
             {

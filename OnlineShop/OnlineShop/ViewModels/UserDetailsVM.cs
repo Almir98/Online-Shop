@@ -17,6 +17,7 @@ namespace OnlineShop.ViewModels
         public string Gender { get; set; }
         public string Email { get; set; }
         public int NumberOfTransactions { get; set; }
+        public string ImageUrl { get; set; }
         public List<ROW> rows { get; set; }
 
         public class ROW

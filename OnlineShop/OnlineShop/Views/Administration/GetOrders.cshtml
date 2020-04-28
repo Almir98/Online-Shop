@@ -5,54 +5,35 @@
 
 *@
 
-    @*<div id="tabs" style="width:400px">
-        <ul>
-            <li><a href="#tab1">Na čekanju</a></li>
-            <li><a href="#tab2">Poništeno</a></li>
-            <li><a href="#tab3">Odobreno</a></li>
-        </ul>
 
-        <div id="#tab1">
+<table border="1">
+    @foreach (var x in Model)
+    {
+        <tr style="background-color: #696969; color: #fff">
+            <th>Narudžba ID</th>
+            <th>Datum narudžbe</th>
+            <th>Datum slanja</th>
+            <th>Korisnik</th>
+            <th>Ukupna cijena</th>
+            <th>Stanje narudžbe</th>
+            <th>Akcija</th>
+        </tr>
+        <tr>
 
-        </div>
+            <td>@x.OrderID</td>
+            <td>@x.OrderDate</td>
+            <td>@x.ShipTime</td>
+            <td><a href="javascript:void(0)" onclick="location.href='/Administration/UserDetails?id=@x.UserID'">@x.UserInfo</a></td>
+            <td>@x.TotalPrice</td>
+            <td>@x.Status</td>
+            <td>
+                <button id="edit" onclick="Edit(@x.OrderID)">Detalji</button>
+            </td>
+        </tr>
 
-        <div id="#tab2">
+    }
 
-        </div>
-
-        <div id="#tab3">
-
-        </div>
-
-    </div>*@
-    <table border="1">
-        @foreach (var x in Model)
-        {
-            <tr style="background-color: #696969; color: #fff">
-                <th>Narudžba ID</th>
-                <th>Datum narudžbe</th>
-                <th>Datum slanja</th>
-                <th>Korisnik</th>
-                <th>Ukupna cijena</th>
-                <th>Stanje narudžbe</th>
-                <th>Akcija</th>
-            </tr>
-            <tr>
-
-                <td>@x.OrderID</td>
-                <td>@x.OrderDate</td>
-                <td>@x.ShipTime</td>
-                <td><a href="javascript:void(0)" onclick="location.href='/Administration/UserDetails?id=@x.UserID'">@x.UserInfo</a></td>  
-                <td>@x.TotalPrice</td>
-                <td>@x.Status</td> 
-                <td>
-                    <button id="edit" onclick="Edit(@x.OrderID)">Detalji</button>
-                </td>
-            </tr>
-            
-        }
-
-    </table>
+</table>
 
 <script>
     function Edit(id) {

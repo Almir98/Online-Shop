@@ -1,0 +1,140 @@
+﻿
+@{
+    //Layout = null;
+}
+@{
+    var user = (User)TempData["key"];
+}
+<!DOCTYPE html>
+<style>
+    input[type=text], select {
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    label {
+  display: inline-block;
+  width: 140px;
+  text-align:left;
+}​
+    #pi {
+        
+        /*width: inherit;
+        height: inherit;*/
+    }
+
+    #personal {
+        float: left;
+        width: 40%;
+        height: 700px;
+        margin: 10px 20px 20px 10px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y:scroll;
+        border-radius: 10px;
+        background-color: #d9d9d9;
+        padding: 20px;
+
+    }
+  
+    #orders {
+        float: left;
+        width: 55%;
+        height: 350px;
+        margin: 10px 10px 10px 10px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y:scroll;
+        border-radius:10px;
+        background-color: #d9d9d9;
+        padding: 20px;
+
+    }
+
+    #notifications {
+       float: left;
+        width: 55%;
+        height: 330px;
+        margin: 10px 10px 20px 10px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y:scroll;
+        border-radius:10px;
+        background-color: #d9d9d9;
+        padding: 20px;
+
+    }
+</style>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Panel</title>
+</head>
+<body>
+
+    <h3 style="margin-left:10px;color:maroon;">Korisnički panel</h3> <br /> 
+
+    <div id="personal">
+        <h4>Lične informacije</h4> <br />
+        
+        
+            
+        <div class="block">
+            <label>Ime</label>
+            <input readonly type="text" value="@user.Name">
+        </div> <br />
+
+        <div class="block">
+            <label>Prezime</label>
+            <input readonly type="text" value="@user.Surname">
+        </div> <br />
+
+        <div class="block">
+            <label>Adresa</label>
+            <input readonly type="text" value="@user.Adress">
+        </div> <br />
+
+        <div class="block">
+            <label>Grad</label>
+            <input readonly type="text" value="@user.City.CityName">
+        </div> <br />
+
+        <div class="block">
+             <label>Broj telefona</label>
+             <input readonly type="text" value="@user.PhoneNumber">
+        </div> <br />
+
+        <div class="block">
+             <label>Email</label>
+             <input readonly type="text" value="@user.Email">
+        </div> <br />
+
+               <h5>Profil uredite <a href="/Customer/ChangeInfo">ovdje</a></h5>
+
+        </div>
+    
+
+    <div id="orders">
+
+
+    </div>
+
+    <div id="notifications">
+
+
+    </div>
+
+</body>
+</html>
+
+<script>
+    $.get("/Customer/GetOrders", function (res) {
+        $("#orders").html(res);
+    });
+
+</script>

@@ -1,0 +1,26 @@
+﻿@model ChangeUserInfoVM
+@{
+//Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ChangeInfo</title>
+</head>
+<body>
+    <h3>Uredi profilne informacije:</h3> <br /> <br />
+
+                                                <form action="/Customer/SaveUserInfo" method="post">
+                                                    Ime: @Html.TextBoxFor(model => model.name, new { @required = "required" })   <br />
+                                                    Prezime: @Html.TextBoxFor(model => model.surname, new { @required = "required" })<br />
+                                                    Adresa: @Html.TextBoxFor(model => model.adress, new { @required = "required" })<br />
+                                                    Broj telefona: @Html.TextBoxFor(model => model.phonenumber, new { @required = "required" }) <br />
+                                                    Grad: <select required asp-for="choosencity" asp-items="@Model.cities">Odaberite grad</select><br />
+                                                    <button type="submit">Spremi</button>  <button type="button" onclick="location.href='/Customer/Panel'">Nazad</button>
+                                                </form>
+
+</body>
+</html>

@@ -36,7 +36,31 @@ namespace OnlineShop.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            int id = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var u = _database.user.Find(id);
+            AdminDetailsVM model = new AdminDetailsVM
+            {
+                Id = id,
+                Name = u.Name,
+                Surname = u.Surname,
+                BirthDate = u.BirthDate,
+                Adress = u.Adress,
+                PhoneNumber = u.PhoneNumber,
+                CityName = _database.city.Find(u.CityID).CityName,
+                Gender = _database.gender.Find(u.GenderID)._Gender,
+                Email = u.Email,
+                ShowButton = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) == id,
+                NumberOfActivities = _database.adminactivity.Where(aa => aa.AdminID == id).Count(),
+                ImageUrl = u.ImageUrl,
+                rows = _database.adminactivity.Where(aa => aa.AdminID == id).Select(aa => new AdminDetailsVM.ROW
+                {
+                    Description = aa.Activity.Description,
+                    DateOfActivity = aa.DateOfActivity
+                }).ToList()
+
+            };
+
+            return View(model);
         }
         public IActionResult ShowOrders()
         {
@@ -66,8 +90,8 @@ namespace OnlineShop.Controllers
             
                //ovdje ide neki VM
                var order = _database.order.Include(i=>i.OrderStatus).FirstOrDefault(s=>s.OrderID==id);
-            var User = _database.user.Find(order.UserID);
-            var model = new EditOrderVM {
+               var User = _database.user.Find(order.UserID);
+               var model = new EditOrderVM {
                 OrderID = id,
                 UserId = order.UserID,
                 OrderStatus=_database.orderstatus.Find(order.OrderStatusID).Status,
@@ -125,8 +149,13 @@ namespace OnlineShop.Controllers
             order.OrderStatusID = 2;
             order.OrderStatus = _database.orderstatus.Find(2);
             order.ShipDate = DateTime.Now;
+            Notification nova = new Notification
+            {
+                UserID = order.UserID,
+                Text = "Vaša narudžba (" + model.OrderID + ") je isporučena."
+            };
+            _database.Add(nova);
             _database.SaveChanges();
-
             return PartialView("SuccessMessage");
         }
         public IActionResult CancelOrder(int orderid)
@@ -139,6 +168,11 @@ namespace OnlineShop.Controllers
             {
                 _database.product.Find(x.ProductID).UnitsInStock += x.Quantity;  //vracamo tu kolicinu u UnitsInStock jer je s tog mjesta prividno oduzeto, dok je narudzba potvrdjena. U slucaju da se narudzba odobri, onda se oduzima i iz poslovnica. U slucaju otkazivanja narudzbe, vraca se kolicina na UnitsInStock
             }
+            Notification nova = new Notification
+            {
+                UserID = order.UserID,
+                Text = "Vaša narudžba (" + orderid + ") je otkazana."
+            };
             _database.SaveChanges();
 
             return PartialView();
@@ -159,7 +193,8 @@ namespace OnlineShop.Controllers
                         Email=user.Email,
                         Firstname=user.Name,
                         LastName=user.Surname,
-                        PhoneNumber=user.PhoneNumber
+                        PhoneNumber=user.PhoneNumber,
+                        ImageUrl=user.ImageUrl
                     });
                 }
 
@@ -180,7 +215,8 @@ namespace OnlineShop.Controllers
                         Email = user.Email,
                         Firstname = user.Name,
                         LastName = user.Surname,
-                        PhoneNumber = user.PhoneNumber
+                        PhoneNumber = user.PhoneNumber,
+                        ImageUrl=user.ImageUrl
                     });
                 }
 
@@ -192,8 +228,18 @@ namespace OnlineShop.Controllers
         public async Task<IActionResult> SetForAdmin(int id)
         {
             var user = await userManager.FindByIdAsync(id.ToString());
+           
             await userManager.RemoveFromRoleAsync(user, "Customer");
             await userManager.AddToRoleAsync(user, "Admin");
+
+            _database.Add(new AdminActivity
+            {
+                ActivityID = 6,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity = DateTime.Now
+            });
+            _database.SaveChanges();
+
             return RedirectToAction("ListOfCustomers", "Administration");
 
         }
@@ -209,10 +255,11 @@ namespace OnlineShop.Controllers
                 BirthDate = u.BirthDate,
                 Adress = u.Adress,
                 PhoneNumber = u.PhoneNumber,
-                //CityName = u.City.CityName,
-                //Gender = u.Gender._Gender,
+                CityName = _database.city.Find(u.CityID).CityName,
+                Gender = _database.gender.Find(u.GenderID)._Gender,
                 Email =u.Email,
                 NumberOfTransactions=_database.order.Where(o=>o.UserID==id).Count(),
+                ImageUrl=u.ImageUrl,
                 rows=_database.order.Where(o=>o.UserID==id).Select(o=>new UserDetailsVM.ROW
                 {
                     TransactionID=o.OrderID,
@@ -252,17 +299,75 @@ namespace OnlineShop.Controllers
         [HttpPost]
         public IActionResult EditAdminProfile(EditAdminProfileVM model)
         {
-            var user = _database.user.Find(model.Id);
-            user.Name = model.Name;
-            user.Surname = model.Surname;
-            user.BirthDate = model.BirthDate;
-            user.CityID = model.CityID;
-            user.Adress = model.Adress;
-            user.PhoneNumber = model.PhoneNumber;
-            user.GenderID = model.GenderID;
-            _database.SaveChanges();
-            return RedirectToAction("Index", "Administration");
+            if(ModelState.IsValid)
+            {
+                var user = _database.user.Find(model.Id);
+                user.Name = model.Name;
+                user.Surname = model.Surname;
+                user.BirthDate = model.BirthDate;
+                user.CityID = model.CityID;
+                user.Adress = model.Adress;
+                user.PhoneNumber = model.PhoneNumber;
+                user.GenderID = model.GenderID;
+                _database.Add(new AdminActivity
+                {
+                    ActivityID = 4,
+                    AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                    DateOfActivity = DateTime.Now
+                });
+                _database.SaveChanges();
+                return RedirectToAction("Index", "Administration");
+            }
+            return View(model);
         }
+        public IActionResult AdminDetails(int id)
+        {
+            var u = _database.user.Where(u => u.Id == id).Include(u => u.Gender).Include(u => u.City).FirstOrDefault();
+            AdminDetailsVM model = new AdminDetailsVM
+            {
+                Id = id,
+                Name = u.Name,
+                Surname = u.Surname,
+                BirthDate = u.BirthDate,
+                Adress = u.Adress,
+                PhoneNumber = u.PhoneNumber,
+                CityName = _database.city.Find(u.CityID).CityName,
+                Gender = _database.gender.Find(u.GenderID)._Gender,
+                Email = u.Email,
+                ShowButton= Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))==id,
+                NumberOfActivities =_database.adminactivity.Where(aa=>aa.AdminID==id).Count(),
+                ImageUrl=u.ImageUrl,
+                rows=_database.adminactivity.Where(aa=>aa.AdminID==id).Select(aa=> new AdminDetailsVM.ROW
+                {
+                    Description=aa.Activity.Description,
+                    DateOfActivity=aa.DateOfActivity
+                }).ToList()
 
+            };
+
+            return View(model);
+        }
+        public async Task<IActionResult> RemoveAdmin(int id)
+        {
+            var user = _database.user.Find(id);
+            if(await userManager.IsInRoleAsync(user, "Admin"))
+            {
+                await userManager.RemoveFromRoleAsync(user, "Admin");
+                await userManager.AddToRoleAsync(user, "Customer");
+            }
+            _database.Add(new AdminActivity
+            {
+                ActivityID = 5,
+                AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
+                DateOfActivity = DateTime.Now
+            });
+            _database.SaveChanges();
+            var vrijeme = DateTime.Now.ToString();
+            string text = "Poštovani, obavještavamo vas da je vaša uloga administratora na stranici OnlineShop-a oduzeta. Uloga vam je oduzeta u " 
+                + vrijeme+". OnlineShop Service!";
+
+            return Redirect("/Account/Contact?textForMesage=" + text+"&mail="+user.Email+"&ime="+user.Name+"&adresa=/Administration/ListOfAdmins");
+
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,7 @@ namespace OnlineShop.ViewModels
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Lozinku")]
+        [Display(Name = "Lozinka")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
@@ -42,11 +43,13 @@ namespace OnlineShop.ViewModels
         public string PhoneNumber { get; set; }
 
         [DataType(DataType.DateTime)]
-        [Display(Name = "Datum rodjenja")]
+        [Display(Name = "Datum rođenja")]
         public DateTime BirthDate { get; set; }
 
         public int GenderID { get; set; }
         public List<SelectListItem> genders { get; set; }
+        public IFormFile Image { get; set; }
+
 
     }
 }

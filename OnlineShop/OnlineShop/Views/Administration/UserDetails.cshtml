@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Detalji korisnika";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    
+
 }
 <head>
     <style>
@@ -111,11 +111,20 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="profile-img">
-                        <img src="~/images/USER.png" alt="" />
+                        @{
+                            if (Model.ImageUrl != null)
+                            {
+                                <img src="~/images/@Model.ImageUrl" alt="" />
+                            }
+                            else
+                            {
+                                <img src="~/images/USER.png" alt="" />
+                            }
+                        }
                         @*<div class="file btn btn-lg btn-primary">
-                            Change Photo
-                            <input type="file" name="file" />
-                        </div>*@
+            Change Photo
+            <input type="file" name="file" />
+        </div>*@
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -148,12 +157,7 @@
                         <a href="">Website Link</a><br />
                         <a href="">Bootsnipp Profile</a><br />
                         <a href="">Bootply Profile</a>*@
-                        <p>Najčešće kupljene stvari</p>
-                        <a href="">Web Designer</a><br />
-                        <a href="">Web Developer</a><br />
-                        <a href="">WordPress</a><br />
-                        <a href="">WooCommerce</a><br />
-                        <a href="">PHP, .Net</a><br />
+                        
                     </div>
                 </div>
                 <div class="col-md-8">

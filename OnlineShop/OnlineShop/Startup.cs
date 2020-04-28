@@ -42,7 +42,7 @@ namespace OnlineShop
             services.AddScoped<IOrder, OrderServices>();
             services.AddScoped<IBranch, BranchService>();
             services.AddScoped<INotification, NotificationService>();
-
+            services.AddScoped<ICustomer, CustomerServices>();
             services.AddDbContext<OnlineShopContext>(c => c.UseSqlServer(Configuration.GetConnectionString("OnlineShopCS")));
 
             services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);

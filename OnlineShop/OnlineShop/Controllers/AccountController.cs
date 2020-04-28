@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.ViewModels;
 using OnlineShopPodaci;
 using OnlineShopPodaci.Model;
+using MailKit.Net.Smtp;
+using MailKit;
+using MimeKit;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace OnlineShop.Controllers
 {
@@ -17,14 +22,16 @@ namespace OnlineShop.Controllers
         private readonly SignInManager<User> signInManager;
         private OnlineShopContext _db;
         private readonly RoleManager<Role> roleManager;
+        private readonly IHostingEnvironment hostingEnvironment;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, OnlineShopContext db, 
-            RoleManager<Role>roleManager)
+            RoleManager<Role>roleManager, IHostingEnvironment hostingEnvironment)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             _db = db;
             this.roleManager = roleManager;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]       
@@ -43,6 +50,14 @@ namespace OnlineShop.Controllers
         {
             if(ModelState.IsValid)
             {
+                string uniqueImageName=null;
+                if (model.Image != null)
+                {
+                    string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                    uniqueImageName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueImageName);
+                    model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
                 var user = new User
                 {
                     Email = model.Email,
@@ -53,7 +68,8 @@ namespace OnlineShop.Controllers
                     Adress=model.Adress,
                     CityID=model.GradID,
                     PhoneNumber=model.PhoneNumber,
-                    GenderID=model.GenderID
+                    GenderID=model.GenderID,
+                    ImageUrl=uniqueImageName
 
                 };
 
@@ -106,6 +122,32 @@ namespace OnlineShop.Controllers
                 ModelState.AddModelError("", "Neuspješan pokušaj prijave!");
             }
             return View(model);
+        }
+        public IActionResult Contact(string textForMesage,string mail,string ime,string adresa)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("OnlineShop", "rs1.onlineshop.service@gmail.com"));
+            message.To.Add(new MailboxAddress(ime, mail));
+            message.Subject = "OnlineShop Service Notification";
+            message.Body = new TextPart("plain")
+            {
+                Text=textForMesage
+            };
+            using(var client=new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+                client.Authenticate("rs1.onlineshop.service@gmail.com", "onlineShop!1");
+                client.Send(message);
+                client.Disconnect(true);
+
+            }
+
+            return Redirect(adresa);
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 

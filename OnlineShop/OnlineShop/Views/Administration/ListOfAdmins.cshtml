@@ -1,40 +1,43 @@
 ﻿@using X.PagedList;
 @using X.PagedList.Mvc.Core;
+@using System.Security.Claims;
+
 
 
 @{
     ViewData["Title"] = "Lista administratora";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+ Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 @model IPagedList<ListOfAdminsVM>
-<style>
-    .pagination-container {
-        padding: 10px;
-        margin: auto;
-        width: 50%;
-    }
-
-        .pagination-container ul {
-            width: 50%;
+    <style>
+        .pagination-container {
+            padding: 10px;
             margin: auto;
-            background-color: dimgray;
-            height: 55px;
+            width: 50%;
         }
 
-            .pagination-container ul li {
-                font-size: 30px;
+            .pagination-container ul {
+                width: 50%;
                 margin: auto;
-                background-color: gainsboro;
-                height: 40px;
-                margin-top: 10px;
-                padding: 0 10px 2px 10px;
+                height: 55px;
+                text-align: center;
+                padding-left: 14%;
             }
 
-                .pagination-container ul li a {
-                    color: dimgray;
-                    margin: auto;
+                .pagination-container ul li {
+                    font-size: 30px;
+                    background-color: gainsboro;
+                    height: 40px;
+                    margin-top: 7px;
+                    padding: 0 10px 10px 10px;
+                    border: 1px solid #ff0000;
                 }
-</style>
+
+                    .pagination-container ul li a {
+                        color: white;
+                        margin: auto;
+                    }
+    </style>
 
 
 <h3 class="text-center">Lista svih administratora</h3>
@@ -54,14 +57,27 @@
                         <div class="card-header text-center text-danger">@c.Firstname @c.LastName</div>
 
                         <div class="card-body text-center">
-                            <img class="card-img-top" src="~/images/USER.png" style="width:100px" />
+                            @{
+                                if (c.ImageUrl != null)
+                                {
+                                    <img class="card-img-top" src="~/images/@c.ImageUrl" style="width:100px" />
 
-
+                                }
+                                else
+                                {
+                                    <img class="card-img-top" src="~/images/admin.jpg" style="width:100px" />
+                                }
+                            }
                         </div>
 
                         <div class="card-footer text-center">
                             <a href="/Administration/AdminDetails?id=@c.Id" class="btn btn-primary">Detalji</a>
-                            <a href="/Administration/RemoveAdmin?id=@c.Id" class="btn btn-danger">Ukloni admina</a>
+                            @{
+                                if (Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) != c.Id)
+                                {
+                                    <a href="/Administration/RemoveAdmin?id=@c.Id" class="btn btn-danger">Ukloni admina</a>
+                                }
+                            }
 
                         </div>
 

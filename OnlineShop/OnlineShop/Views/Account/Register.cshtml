@@ -1,11 +1,10 @@
 ﻿
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registracija";
 }
 @model RegisterVM
 
-<br />
-<h2>Nova registracija</h2>
+
 
 <style>
     h2{
@@ -17,61 +16,83 @@
         margin:auto;
 
     }
+    #formaR{
+        width:50%;
+        margin:auto;
+        margin-top:40px;
+        border-radius: 25px;
+        border: 10px solid #000000;
+        padding:15px; 
+    }
+    #formaR input{
+        width:50%;
+        margin:auto;
+    }
 </style>
 
 
 <div class="content">
     <div class="col-md-12">
-        <form method="post">
+        <form id="formaR" method="post" enctype="multipart/form-data" class="bg-success">
+            <h3 class="font-weight-bold text-center">Registracija računa</h3>
+
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="FirstName"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="LastName"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="BirthDate"></label>
                 <input asp-for="BirthDate" class="form-control" />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label>Spol : </label>
                 <select asp-for="GenderID" asp-items="@Model.genders"><option>Izaberite</option></select>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label>Grad : </label>
                 <select asp-for="GradID" asp-items="@Model.gradovi"><option>Izaberite</option></select>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="Adress"></label>
                 <input asp-for="Adress" class="form-control" />
                 <span asp-validation-for="Adress" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="PhoneNumber"></label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center font-weight-bold">
                 <label asp-for="ConfirmPassword"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group text-center font-weight-bold">
+                <p>URL slike:</p>
+                <div class="custom-file">
+                    <input asp-for="Image" class="form-control custom-file-input" value="@Model.Image" /><br />
+
+                    <label class="custom-file-label">Izaberi sliku</label>
+                </div>
             </div>
 
             <button class="btn btn-success">Registruj račun</button>
