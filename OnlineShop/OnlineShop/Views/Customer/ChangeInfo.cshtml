@@ -4,6 +4,27 @@
 }
 
 <!DOCTYPE html>
+<style>
+    #container{
+        padding:30px;
+    }
+      .klas, select {
+        
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    label {
+        display: inline-block;
+        width: 140px;
+        text-align: left;
+    }
+
+</style>
 
 <html>
 <head>
@@ -11,16 +32,38 @@
     <title>ChangeInfo</title>
 </head>
 <body>
-    <h3>Uredi profilne informacije:</h3> <br /> <br />
+ <div id="container">
+    <h3>Uredi profilne informacije:</h3> <br />
+  <div style="background-color: #d9d9d9;border-radius:10px;padding:20px; width:30%; align-content:center;">
+      <form action="/Customer/SaveUserInfo" method="post">
 
-                                                <form action="/Customer/SaveUserInfo" method="post">
-                                                    Ime: @Html.TextBoxFor(model => model.name, new { @required = "required" })   <br />
-                                                    Prezime: @Html.TextBoxFor(model => model.surname, new { @required = "required" })<br />
-                                                    Adresa: @Html.TextBoxFor(model => model.adress, new { @required = "required" })<br />
-                                                    Broj telefona: @Html.TextBoxFor(model => model.phonenumber, new { @required = "required" }) <br />
-                                                    Grad: <select required asp-for="choosencity" asp-items="@Model.cities">Odaberite grad</select><br />
-                                                    <button type="submit">Spremi</button>  <button type="button" onclick="location.href='/Customer/Panel'">Nazad</button>
-                                                </form>
+          <div class="block">
+              <label>Ime:</label>
+              @Html.TextBoxFor(model => model.name, new { @required = "required", Class = "klas" })<br />
+          </div> <br />
 
+          <div class="block">
+              <label>Prezime:</label>
+              @Html.TextBoxFor(model => model.surname, new { @required = "required", Class = "klas" })<br />
+          </div> <br />
+          <div class="block">
+              <label>Adresa:</label>
+              @Html.TextBoxFor(model => model.adress, new { @required = "required", Class = "klas" })<br />
+          </div> <br />
+          <div class="block">
+              <label>Telefon:</label>
+              @Html.TextBoxFor(model => model.phonenumber, new { @required = "required", Class = "klas" })<br />
+          </div> <br />
+          <div class="block">
+              <label>Grad:</label> <br />
+              <select required asp-for="choosencity" asp-items="@Model.cities">Odaberite grad</select> <br />
+          </div> <br />
+
+          <button type="submit">Spremi</button>  <button type="button" onclick="location.href='/Customer/Panel'">Nazad</button>
+
+
+      </form>
+</div>
+     </div>
 </body>
 </html>

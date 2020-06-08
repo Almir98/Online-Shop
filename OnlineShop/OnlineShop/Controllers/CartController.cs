@@ -12,6 +12,8 @@ using OnlineShopPodaci.Model;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles = "Customer")]
+
     public class CartController : Controller
     {   
         private ICart _cart;
@@ -34,6 +36,7 @@ namespace OnlineShop.Controllers
 
         public IActionResult LookInCart()
         {
+
             return View();
         }
         public IActionResult GetCartItems()  
@@ -49,7 +52,8 @@ namespace OnlineShop.Controllers
                 SubCategoryName = _database.subcategory.Find(_database.product.Find(s.ProductID).SubCategoryID).SubCategoryName,
                 UnitPrice = _database.product.Find(s.ProductID).UnitPrice,
                 Quantity = s.Quantity,
-                ActualQuantity= _database.product.Find(s.ProductID).UnitsInStock
+                ActualQuantity= _database.product.Find(s.ProductID).UnitsInStock,
+                logourl = _database.product.Find(s.ProductID).ImageUrl
             }
             ).ToList();
             return PartialView(listavm);

@@ -42,7 +42,7 @@ namespace OnlineShopPodaci
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {   
             //modelBuilder.Entity<CartDetails>().HasKey(c => new { c.CartID, c.ProductID });
 
             //modelBuilder.Entity<CartDetails>()

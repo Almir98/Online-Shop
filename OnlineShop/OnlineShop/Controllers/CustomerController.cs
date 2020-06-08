@@ -59,7 +59,7 @@ namespace OnlineShop.Controllers
         public IActionResult Panel()
         {   int id = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             TempData["key"] = _database.Users.Include(a => a.City).FirstOrDefault(i => i.Id == id);
-
+            TempData["key2"] = _database.notification.Where(u => u.UserID == id).ToList();
             return View();
         }
         public IActionResult GetOrders()
@@ -96,8 +96,18 @@ namespace OnlineShop.Controllers
             TempData["key2"] = lista;
             return PartialView();
         }
+        public int GetNotifNum()
+        {
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return _database.notification.Where(a => a.UserID == userid).Count(s => s.Read == false);
+        }
+        public void SetAllNotifRed()
+        {
+            var userid = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _database.notification.Where(u => u.UserID == userid && u.Read == false).ToList().ForEach(s=>s.Read=true);
+            _database.SaveChanges();
+        }
 
 
-
-    }
+    } 
 }

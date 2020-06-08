@@ -25,7 +25,6 @@ namespace OnlineShop.Controllers
         private readonly IProduct _Iproduct;
         private readonly OnlineShopContext _database;
         private readonly IHostingEnvironment hosting;
-
         private  INotification _notificationService;
 
         public ProductController(IProduct p, OnlineShopContext b, IHostingEnvironment hostingEnvironment, INotification notification)
@@ -35,7 +34,6 @@ namespace OnlineShop.Controllers
             hosting = hostingEnvironment;
             _notificationService = notification;
         }
-
 
         public IActionResult Index()
         {
@@ -49,7 +47,6 @@ namespace OnlineShop.Controllers
             return View(data);
         }
 
-        
         [HttpGet]
         public async Task<IActionResult> Show(string search)
         {
@@ -95,7 +92,6 @@ namespace OnlineShop.Controllers
             }
             return null;
         }
-
         
         public IActionResult AddProduct(int ProductID)
         {
@@ -159,10 +155,10 @@ namespace OnlineShop.Controllers
                 neki.UnitPrice = model.UnitPrice;
                 neki.UnitsInStock = model.UnitsInStock;
 
-                await _database.SaveChangesAsync();        // da bi proizvod dobio svoj id ! 
+                await _database.SaveChangesAsync();        
                 if (model.ProductID != neki.ProductID)
                 {
-                    var st_pr = new StockProduct            // medjutabela
+                    var st_pr = new StockProduct            
                     {
                         StockID = 1,                                                                        
                         ProductID = neki.ProductID,
@@ -440,11 +436,11 @@ namespace OnlineShop.Controllers
                 // ide u tabelu jel u toj prodavnici taj proizvod vec postoji
 
                 if (bp!=null && model.productID == bp.ProductID){
-                    bp.UnitsInBranch += i.quntityPerBranch;     // ako je u pitanju isti proizvod doda se kolicina samo
+                    bp.UnitsInBranch += i.quntityPerBranch;     
                 }
                 else
                 {
-                   var testing = new BranchProduct  // pravi se novi zapis te poslovnice tog proizvoda te kolicine
+                   var testing = new BranchProduct  
                    {
                        BranchID = i.branchID,
                        ProductID = product.ProductID,
@@ -452,23 +448,20 @@ namespace OnlineShop.Controllers
                    };
                    _database.Add(testing);
                 }
-                sum+=i.quntityPerBranch;        // sabiraju se kolicine po prodavnicama
+                sum+=i.quntityPerBranch;        
             }
             var stock = _database.stockproduct.Where(e => e.ProductID == model.productID).FirstOrDefault();
-            // ode na skladiste uzme koliko ga ima tamo
 
             if (stock.Quantity >= sum)
             {
-                stock.Quantity =stock.Quantity - sum;   // od skladista oduzmi UKUPNU KOLICINU ZA SVE POSLOVNICE
+                stock.Quantity =stock.Quantity - sum;   
                 _database.Add(new AdminActivity
                 {
                     ActivityID = 7,
                     AdminID = Int32.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)),
                     DateOfActivity = DateTime.Now
                 });
-
                 _database.SaveChanges();
-
             }
             else
             {

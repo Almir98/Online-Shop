@@ -17,7 +17,7 @@ namespace OnlineShopServices
         }
         public List<Notification>GetNotifications(int userid)
         {
-            return _database.notification.Where(a => a.UserID == userid).ToList(); 
+            return _database.notification.Where(a => a.UserID == userid).OrderByDescending(s=>s.NotificationID).ToList(); 
         }
 
         

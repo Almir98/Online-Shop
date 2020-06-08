@@ -57,5 +57,6 @@ namespace OnlineShop.Controllers
 
             return Redirect("/Administration/AdminDetails?id=" + model.Id);
         }
+
     }
 }

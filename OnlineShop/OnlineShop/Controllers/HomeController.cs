@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace OnlineShop.Controllers
                 CategoryName = c.CategoryName,
                 imageurl = c.ImageUrl
             }).ToList();
+
 
             return View(data);
         }

@@ -4,63 +4,102 @@
 }
 
 <!DOCTYPE html>
-
+<style>
+    #container{
+        margin:30px;
+        padding:10px;
+    }
+    #tabela{
+    background-color: #d9d9d9;
+    padding:20px;
+    width:90%;
+    /*margin:auto;*/
+    border-radius:10px;
+    }
+    input[type=text] {
+        width: 25%;
+        padding: 12px 20px;
+        margin: 8px 0 2px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+     label {
+        display: inline-block;
+        width: 140px;
+        text-align: left;
+    }
+     
+</style>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>OrderPreview</title>
 </head>
 <body>
-    <h2 style="color:maroon">Pregled narudžbe</h2> <br />
+    <div id="container">
+        <h2 style="color:maroon">Pregled narudžbe</h2> <br />
+        <div id="tabela">
+            <table style="background-color:white;" class="table table-hover" border="1">
+                <tr style="background-color: #696969; color: #fff">
+                    <th>Šifra proizvoda</th>
+                    <th>Naziv proizvoda</th>
+                    <th>Kategorija</th>
+                    <th>Količina</th>
+                    <th>Cijena po komadu</th>
+                    <th>Ukupno</th>
+                </tr>
+                @foreach (var x in Model.cartitems)
+                {
+                    <tr>
+                        <td><img src="~/images/@x.logourl" height="40" width="40" /> @x.ProductNumber</td>
+                        <td>@x.ProductName</td>
+                        <td>@x.SubCategoryName</td>
+                        <td>
+                            <input type="number" readonly value="@x.Quantity" />
+                        </td>
+                        <td>@x.UnitPrice BAM</td>
+                        <td>@(x.Quantity * x.UnitPrice) BAM</td>
+                    </tr>
 
-    <table border="1">
-        <tr>
-            <th>Šifra proizvoda</th>
-            <th>Naziv proizvoda</th>
-            <th>Kategorija</th>
-            <th>Količina</th>
-            <th>Cijena po komadu</th>
-            <th>Ukupno</th>
-        </tr>
-        @foreach (var x in Model.cartitems)
-        {
-            <tr>
-                <td>@x.ProductNumber</td>
-                <td>@x.ProductName</td>
-                <td>@x.SubCategoryName</td>
-                <td>
-                    <input type="number" readonly value="@x.Quantity" />
-                </td>
-                <td>@x.UnitPrice BAM</td>
-                <td>@(x.Quantity * x.UnitPrice) BAM</td>
-            </tr>
+
+                }
+            </table>
+        </div><br />
+        <text><h3>Ukupno: @Model.cartitems.Sum(s => s.UnitPrice * s.Quantity) KM</h3></text> <br />
 
 
-        }
-    </table> <br />
-    <text><h3>Ukupno: @Model.cartitems.Sum(s => s.UnitPrice * s.Quantity) KM</h3></text> <br /> <br />
+        <h3>Podaci za slanje </h3> <br />
+        <div class="block">
+            <label>Ime</label>
+            <input type="text" readonly value="@Model.fname " /> <br />
+        </div> <br />
+        <div class="block">
+            <label>Prezime</label>
+            <input type="text" readonly value="@Model.lname " /> <br />
+        </div> <br />
+        <div class="block">
+            <label>Adresa</label>
+            <input type="text" readonly value="@Model.adress " /> <br />
+        </div> <br />
+        <div class="block">
+            <label>Adresa</label>
+            <input type="text" readonly value="@Model.phonenumber" /> <br />
+        </div> <br />
 
-    <h3>Podaci za slanje </h3> <br />
-    <input readonly value="@Model.fname " /> <br />
-    Ime <br />
-    <input readonly value="@Model.lname " /> <br />
-    Prezime <br />
-    <input readonly value="@Model.adress " /> <br />
-    Adresa <br />
-    <input readonly value="@Model.phonenumber" /> <br />
-    Broj telefona <br />
-    @if (Model.FilledInfo == false)
-    {<button disabled id="finish">Zaključi narudžbu</button> <text>Potrebne informacije za slanje pošiljke nisu evidentirane ! Uredite profil <a href="#">ovdje</a> NEK OVO NEKO IMPLEMENTIRA HE HE /User/ChangeInfo <br /></text>}
+        @if (Model.FilledInfo == false)
+        {<button disabled id="finish">Zaključi narudžbu</button> <text>Potrebne informacije za slanje pošiljke nisu evidentirane ! Uredite profil <a href="#">ovdje</a> NEK OVO NEKO IMPLEMENTIRA HE HE /User/ChangeInfo <br /></text>}
     else
-    {<button id="finish">Zaključi narudžbu</button> <br />} 
-    
-    <button id="continue">Nastavi sa kupovinom</button> <br />
+    {<button id="finish">Zaključi narudžbu</button>}
 
+        <button id="continue">Nastavi sa kupovinom</button> <br />
+    </div>
 </body>
 </html>
 <script>
     $("#continue").click(function () {
-        document.location = "/Product/Show2";
+        document.location = "/Home";
     });
 
     $("#finish").click(function () {

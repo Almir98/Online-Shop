@@ -20,17 +20,13 @@ namespace OnlineShop.ViewModels
         [Required]
         public DateTime BirthDate { get; set; }
         public int CityID { get; set; }
-
-        [Required]
         public List<SelectListItem> City { get; set; }
         public string Adress { get; set; }
-
+        
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
         public int GenderID { get; set; }
-
-        [Required]
         public List<SelectListItem> Gender { get; set; }
     }
 }

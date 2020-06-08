@@ -1,5 +1,6 @@
 ﻿@using OnlineShop.ViewModels
-
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
 @model ProductDetailsVM
 @{
     ViewData["Title"] = "ProductDetails";
@@ -10,7 +11,11 @@
 
 
 <style>
-     #Added {
+    .disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    #Added {
         display: none;
         position: fixed;
         top: 0;
@@ -159,9 +164,19 @@
             </div>
             <div id="rightFooter">
 
-                <h5>Cijena: @Model.UnitPrice KM sa  PDV-om</h5> <br /> 
-                <input type="number" id="@Model.ProductID" value="1" min="1" max="@Model.UnitsInStock" /> 
-                <button class="btn btn-primary" onclick="AddToCart(@Model.ProductID)">Dodaj u korpu</button>
+                <h5>Cijena: @Model.UnitPrice KM sa  PDV-om</h5> <br />
+                @if (!signInManager.IsSignedIn(User))
+                {
+                    <input disabled type="number" id="@Model.ProductID" value="1" min="1" max="@Model.UnitsInStock" />
+                    <button title="Za ovu opciju morate biti prijavljeni !" disabled class="btn btn-primary" onclick="AddToCart(@Model.ProductID)">Dodaj u korpu</button>
+                    @*<p>Za ovu opciju morate biti prijavljeni !</p>*@
+                }
+                else
+                {
+                    <input type="number" id="@Model.ProductID" value="1" min="1" max="@Model.UnitsInStock" />
+                    <button class="btn btn-primary" onclick="AddToCart(@Model.ProductID)">Dodaj u korpu</button>
+                }
+              
 
             </div>
         </div>

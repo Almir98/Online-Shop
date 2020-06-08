@@ -2,46 +2,49 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model List<GetOrdersVM>
-  
-    <style>
-        table{
-            background-color:white;
-            border:solid black 1.25px;
-        }
-    </style>
-    <h4>Završene narudžbe </h4> <br />
-                                 
-                                     <table class="table table-hover"  border="1">
-                                         <thead>
-                                             <tr style="background-color: #696969; color: #fff">
-                                                 <th>Narudžba</th>
-                                                 <th>Naručeno</th>
-                                                 <th>Isporučeno</th>
-                                                 <th>Cijena</th>
-                                                 <th>Akcija</th>
-                                             </tr>
-                                         </thead>
-                                             @foreach (var x in Model)
-                                             {
-                                                 <tr>
-                                                     <td>@x.orderid</td>
-                                                     <td>@x.orderdate</td>
-                                                     <td>@x.shipdate</td>
-                                                     <td>@x.totalprice BAM</td>
-                                                     <td><button onclick="GetDetails(@x.orderid)">Detalji</button></td>
-                                                 </tr>
-                                             }
 
-                                     </table>
-                               
-        <script>
+<style>
+    table {
+        background-color: white;
+        border: solid black 1.25px;
+    }
+</style>
+<h4>Završene narudžbe </h4>
+<br />
 
-            function GetDetails(id) {
-                $.get("/Customer/GetOrderDetails?orderid=" + id, function (res) {
-                    $("#orders").html(res);
-                });
-            }
+<table class="table table-hover" border="1">
+    <thead>
+        <tr style="background-color: #696969; color: #fff">
+            <th>Narudžba</th>
+            <th>Naručeno</th>
+            <th>Isporučeno</th>
+            <th>Cijena</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    @foreach (var x in Model)
+    {
+        <tr>
+            <td>@x.orderid</td>
+            <td>@x.orderdate</td>
+            <td>@x.shipdate</td>
+            <td>@x.totalprice BAM</td>
+            <td><button onclick="GetDetails(@x.orderid)">Detalji</button></td>
+        </tr>
+    }
+
+</table>
+    @if (Model.Count() == 0) {
+        @:<h4>Trenutno nema završenih narudžbi.</h4> 
+    }
+<script>
+
+    function GetDetails(id) {
+        $.get("/Customer/GetOrderDetails?orderid=" + id, function (res) {
+            $("#orders").html(res);
+        });
+    }
 
 
 
-        </script>
+</script>

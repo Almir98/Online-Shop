@@ -4,6 +4,8 @@
 }
 @{
     var user = (User)TempData["key"];
+    var lista = (List<Notification>)TempData["key2"];
+  
 }
 <!DOCTYPE html>
 <style>
@@ -16,13 +18,15 @@
         border-radius: 4px;
         box-sizing: border-box;
     }
+
     label {
-  display: inline-block;
-  width: 140px;
-  text-align:left;
-}​
+        display: inline-block;
+        width: 140px;
+        text-align: left;
+    }
+
+
     #pi {
-        
         /*width: inherit;
         height: inherit;*/
     }
@@ -34,13 +38,12 @@
         margin: 10px 20px 20px 10px;
         box-sizing: border-box;
         overflow-x: hidden;
-        overflow-y:scroll;
+        overflow-y: scroll;
         border-radius: 10px;
         background-color: #d9d9d9;
         padding: 20px;
-
     }
-  
+
     #orders {
         float: left;
         width: 55%;
@@ -48,25 +51,23 @@
         margin: 10px 10px 10px 10px;
         box-sizing: border-box;
         overflow-x: hidden;
-        overflow-y:scroll;
-        border-radius:10px;
+        overflow-y: scroll;
+        border-radius: 10px;
         background-color: #d9d9d9;
         padding: 20px;
-
     }
 
     #notifications {
-       float: left;
+        float: left;
         width: 55%;
         height: 330px;
         margin: 10px 10px 20px 10px;
         box-sizing: border-box;
         overflow-x: hidden;
-        overflow-y:scroll;
-        border-radius:10px;
+        overflow-y: scroll;
+        border-radius: 10px;
         background-color: #d9d9d9;
         padding: 20px;
-
     }
 </style>
 
@@ -77,13 +78,13 @@
 </head>
 <body>
 
-    <h3 style="margin-left:10px;color:maroon;">Korisnički panel</h3> <br /> 
+    <h3 style="margin-left:10px;color:maroon;">Korisnički panel</h3> <br />
 
     <div id="personal">
         <h4>Lične informacije</h4> <br />
-        
-        
-            
+
+
+
         <div class="block">
             <label>Ime</label>
             <input readonly type="text" value="@user.Name">
@@ -105,19 +106,19 @@
         </div> <br />
 
         <div class="block">
-             <label>Broj telefona</label>
-             <input readonly type="text" value="@user.PhoneNumber">
+            <label>Broj telefona</label>
+            <input readonly type="text" value="@user.PhoneNumber">
         </div> <br />
 
         <div class="block">
-             <label>Email</label>
-             <input readonly type="text" value="@user.Email">
+            <label>Email</label>
+            <input readonly type="text" value="@user.Email">
         </div> <br />
 
-               <h5>Profil uredite <a href="/Customer/ChangeInfo">ovdje</a></h5>
+        <h5>Profil uredite <a href="/Customer/ChangeInfo">ovdje</a></h5>
 
-        </div>
-    
+    </div>
+
 
     <div id="orders">
 
@@ -125,6 +126,37 @@
     </div>
 
     <div id="notifications">
+        @if (lista.Count == 0)
+        {
+            @:<h4>Trenutno nema notifikacija.</h4>
+        }
+        else
+        {
+            <table style="background-color:white;" class="table table-hover" border="1">
+                <tr style="background-color: #696969; color: #fff">
+                    <th>Narudžba</th>
+                    <th>Obavijest</th>
+                </tr>
+                @foreach (var x in lista)
+                {
+                    if (!x.Read)
+                    {
+                        <tr>
+                            <td><span style="font-size:11px; color:darkgreen;">[New]</span> @String.Join("", x.Text.Where(char.IsDigit))</td>
+                            <td>@x.Text</td>
+                        </tr>
+}
+                    else
+                    {
+                        <tr>
+                            <td>@String.Join("", x.Text.Where(char.IsDigit))</td>
+                            <td>@x.Text</td>
+                        </tr>
+}
+
+                }
+            </table>
+        }
 
 
     </div>
@@ -136,5 +168,8 @@
     $.get("/Customer/GetOrders", function (res) {
         $("#orders").html(res);
     });
+    $.ajax({url: "/Customer/SetAllNotifRed", success: function(){
+        
+    }});
 
 </script>

@@ -14,6 +14,7 @@ namespace OnlineShop.ViewModels
         public double UnitPrice { get; set; }
         public int Quantity { get; set; }
         public int ActualQuantity { get; set; }
+        public string logourl { get; set; }
 
     }
 }

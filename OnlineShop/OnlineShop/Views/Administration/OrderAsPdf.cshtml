@@ -1,0 +1,83 @@
+﻿@model OrderAsPdfVM
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style>
+
+    input[type=text] {
+        width: 50%;
+        padding: 7px 4px;
+        margin: 8px 0 2px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    label {
+        display: inline-block;
+        width: 140px;
+        text-align: left;
+    }
+</style>
+
+
+<p>Detalji narudžbe</p>
+<br />
+<div class="block">
+    <label>Narudžba rb</label>
+    <input type="text" asp-for="OrderID" readonly value="@Model.OrderID " /> <br />
+</div>
+<br />
+<div class="block">
+    <label>Datum narudžbe</label>
+    <input type="text" asp-for="OrderDate" readonly value="@Model.OrderDate" /> <br />
+</div>
+<br />
+<div class="block">
+    <label>Korisnik</label>
+    <input type="text" readonly value="@Model.UserInfo " /> <br />
+</div>
+<br />
+<div class="block">
+    <label>Status narudžbe</label>
+    <input type="text" readonly value="@Model.OrderStatus" /> <br />
+</div>
+<br />
+
+<table border="1">
+
+    @foreach(var x in Model.items)
+    {
+        <tr style="background-color: #696969; color: #fff">
+
+            <th>Šifra proizvoda</th>
+            <th>Naziv proizvoda</th>
+            <th>Količina</th>
+            <th>Cijena</th>
+        </tr>
+        <tr>
+            <td><input readonly value="@x.ProductNumber" /></td>
+            <td><input readonly value="@x.ProductName" /></td>
+            <td><input readonly value="@x.Quantity" /></td>
+            <td><input readonly value="@x.UnitPrice" /></td>
+        </tr>
+
+    }
+</table>
+<br />
+   
+<h4>UKUPNO @Model.TotalPrice KM</h4> <br />
+
+                                     <div id="footer">
+                                         <input type="text" class="signature" style="width:20%; border:0;border-bottom: 1px solid #000;" />
+                                         <br />
+                                         <p1> Narudžbu zaključio</p1>  <p1 style="float:right;">@DateTime.Now.ToShortDateString()</p1>
+
+
+                                     </div>
+
+
+
+
+

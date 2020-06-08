@@ -72,7 +72,6 @@ namespace OnlineShop.Controllers
             };
 
             return View(model);
-
         }
 
         public IActionResult ProductDetail(int productID,int branchID)
