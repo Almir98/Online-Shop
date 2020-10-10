@@ -16,7 +16,6 @@ namespace OnlineShop.Controllers
 {
     public class HomeController : Controller
     {
-
         private readonly ILogger<HomeController> _logger;
         private readonly IProduct _Iproduct;
         private readonly OnlineShopContext _database;
